@@ -415,7 +415,7 @@ q7_zlen = q7_z_m.max() - q7_z_m.min()
 #s4_bz_m = fzeros((s4_nr+1,1,s4_nz+1))
 #s4_bz_m[:,0,:] = s4_bz_m_in
 
-q7_nl_id = addnewegrddataset(dx=q7_dx,dy=q7_dy,zlength=q7_zlen,bx=q7_ex_m,by=q7_ey_m,bz=q7_ez_m)  # pass arb dy to avoid error trap  
+q7_nl_id = addnewegrddataset(dx=q7_dx,dy=q7_dy,zlength=q7_zlen,ex=q7_ex_m,ey=q7_ey_m,ez=q7_ez_m)  # pass arb dy to avoid error trap  
 
 
 # --- define esq q7 1st triplet part 1 
