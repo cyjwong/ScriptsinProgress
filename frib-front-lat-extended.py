@@ -252,7 +252,7 @@ else:
 
 # --- element specification 
 
-d5p1_zc  = 69.581900   # D5 1: z-center  
+d5p1_zc  = 69.587759   # D5 1: z-center  
 d5p1_str = 1.0         # D5 1: Input field scale factor
 d5p1_typ = "ideal"        # D5 1: type: "ideal" = uniform By, "lin" = linear optics fields, "3d" = 3d field  
 
@@ -314,6 +314,150 @@ d5p1_bend = True  # True or False: Add ideal bend to lattice
 if d5p1_bend:
   top.diposet = False     # turn off By that automatically generated with addnewbend()
   addnewbend(zs = d5p1_zs, ze = d5p1_ze, rc = (d5p1_ze - d5p1_zs)/(pi/2.))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Q7 Electrostatic Quads
+# Comment: linear and nonlinear variants must have same z-grid. 
+
+# --- element specification 
+
+q7t1p1_zc = 70.537759 # (q7: Q7 device type; t1: 1st triplet; p1: part 1)
+q7t1p1_str = 10000 # [V]
+q7t1p1_sign = 1    # +1 for x_quad, -1 for y_quad
+q7t1p1_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z field
+
+inter_quad_distance = 0.335 # centroid distance between two quads in a triplet
+
+q7t1p2_zc = q7t1p1_zc + inter_quad_distance
+q7t1p2_str = 10000 # [V]
+q7t1p2_sign = -1   # +1 for x_quad, -1 for y_quad
+q7t1p2_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z field
+
+q7t1p3_zc = q7t1p2_zc + inter_quad_distance
+q7t1p3_str = 10000 # [V]
+q7t1p3_sign = 1    # +1 for x_quad, -1 for y_quad
+q7t1p3_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z field  
+
+
+
+## --- linear element data  
+##fi = PRpickle.PR("lat_s4.lin.20140603.pkl")
+#fi = PRpickle.PR("lat_s4.lin.20141031.pkl")
+#s4_dz  = fi.s4_dz 
+#s4_nz  = fi.s4_nz  
+#s4_z_m = fi.s4_z_m 
+#s4_bz0_m   = fi.s4_bz0_m
+#s4_bz0p_m  = fi.s4_bz0p_m
+#fi.close() 
+
+#s4_zlen = s4_z_m.max() - s4_z_m.min() 
+#s4_lin_id = addnewmmltdataset(zlen=s4_zlen,ms=s4_bz0_m,msp=s4_bz0p_m,nn=0,vv=0)
+
+# --- nonlinear element field data 
+#fi = PRpickle.PR('lat_s4.rz.20140603.pkl') 
+fi = PRpickle.PR('lat_s4.rz.20141031.pkl') 
+#
+s4_len_coil   = fi.s4_len_coil 
+s4_len_magnet = fi.s4_len_magnet 
+s4_r_coil_i   = fi.s4_r_coil_i 
+s4_r_coil_o   = fi.s4_r_coil_o
+#
+if fi.s4_nz != s4_nz: raise Exception("S4: Nonlinear field model nz not equal to linear field model nz") 
+s4_dr   = fi.s4_dr
+s4_nr   = fi.s4_nr 
+s4_r_m  = fi.s4_r_m 
+s4_br_m_in = fi.s4_br_m
+s4_bz_m_in = fi.s4_bz_m
+fi.close() 
+
+# --- nonlinear element vector potential data 
+#fi = PRpickle.PR('lat_s4.at.20140603.pkl') 
+fi = PRpickle.PR('lat_s4.at.20141031.pkl') 
+#
+if fi.s4_nz != s4_nz: raise Exception("S4: Nonlin Vector potential model nz not equal to nonlinear/linear model nz")
+if fi.s4_nr != s4_nr: raise Exception("S4: Nonlin Vector potential model nr not equal to nonlinear model nr")
+s4_at_m  = fi.s4_at_m
+fi.close() 
+
+# --- Axisymmetric b-field arrays must be 3d shape (nr+1,arb,nz+1) to load into Warp  
+s4_br_m = fzeros((s4_nr+1,1,s4_nz+1))  
+s4_br_m[:,0,:] = s4_br_m_in
+s4_bz_m = fzeros((s4_nr+1,1,s4_nz+1))
+s4_bz_m[:,0,:] = s4_bz_m_in
+
+s4_nl_id = addnewbgrddataset(dx=s4_dr,dy=1.,zlength=s4_zlen,bx=s4_br_m,bz=s4_bz_m,rz = true)  # pass arb dy to avoid error trap  
+
+s4_aspect = s4_r_coil_i/s4_len_coil 
+
+# --- define solenoid s4 1 
+if s4p1_typ == "lin":
+  s4p1 = addnewmmlt(zs=s4p1_zc-s4_zlen/2.,ze=s4p1_zc+s4_zlen/2.,id=s4_lin_id,sc=s4p1_str) 
+elif s4p1_typ == "nl":
+  s4p1 = addnewbgrd(xs=0.,zs=s4p1_zc-s4_zlen/2.,ze=s4p1_zc+s4_zlen/2.,id=s4_nl_id,sc=s4p1_str)
+else:
+  print("Warning: No S4 1st Solenoid Applied Fields Defined") 
+  s4p1 = None
+
+# --- define solenoid s4 2 
+if s4p2_typ == "lin":
+  s4p2 = addnewmmlt(zs=s4p2_zc-s4_zlen/2.,ze=s4p2_zc+s4_zlen/2.,id=s4_lin_id,sc=s4p2_str) 
+elif s4p2_typ == "nl":
+  s4p2 = addnewbgrd(xs=0.,zs=s4p2_zc-s4_zlen/2.,ze=s4p2_zc+s4_zlen/2.,id=s4_nl_id,sc=s4p2_str)
+else:
+  print("Warning: No S4 2nd Solenoid Applied Fields Defined") 
+  s4p2 = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
