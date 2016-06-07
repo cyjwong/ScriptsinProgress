@@ -375,57 +375,75 @@ q7t1p3_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z 
 
 # --- nonlinear element field data 
 #fi = PRpickle.PR('lat_s4.rz.20140603.pkl') 
-fi = PRpickle.PR('lat_s4.rz.20141031.pkl') 
+fi = PRpickle.PR('lat_q7.3d.20160607.pkl') 
+##
+#s4_len_coil   = fi.s4_len_coil 
+#s4_len_magnet = fi.s4_len_magnet 
+#s4_r_coil_i   = fi.s4_r_coil_i 
+#s4_r_coil_o   = fi.s4_r_coil_o
 #
-s4_len_coil   = fi.s4_len_coil 
-s4_len_magnet = fi.s4_len_magnet 
-s4_r_coil_i   = fi.s4_r_coil_i 
-s4_r_coil_o   = fi.s4_r_coil_o
-#
-if fi.s4_nz != s4_nz: raise Exception("S4: Nonlinear field model nz not equal to linear field model nz") 
-s4_dr   = fi.s4_dr
-s4_nr   = fi.s4_nr 
-s4_r_m  = fi.s4_r_m 
-s4_br_m_in = fi.s4_br_m
-s4_bz_m_in = fi.s4_bz_m
-fi.close() 
+#if fi.s4_nz != s4_nz: raise Exception("S4: Nonlinear field model nz not equal to linear field model nz") 
 
-# --- nonlinear element vector potential data 
-#fi = PRpickle.PR('lat_s4.at.20140603.pkl') 
-fi = PRpickle.PR('lat_s4.at.20141031.pkl') 
-#
-if fi.s4_nz != s4_nz: raise Exception("S4: Nonlin Vector potential model nz not equal to nonlinear/linear model nz")
-if fi.s4_nr != s4_nr: raise Exception("S4: Nonlin Vector potential model nr not equal to nonlinear model nr")
-s4_at_m  = fi.s4_at_m
-fi.close() 
+q7_dx   = fi.q7_dx
+q7_dy   = fi.q7_dy
+q7_dz   = fi.q7_dz
+q7_nx   = fi.q7_nx
+q7_ny   = fi.q7_ny
+q7_nz   = fi.q7_nz
+q7_x_m  = fi.q7_x_m 
+q7_y_m  = fi.q7_y_m 
+q7_z_m  = fi.q7_z_m 
+q7_ex_m  = fi.q7_ex_m 
+q7_ey_m  = fi.q7_ey_m 
+q7_ez_m  = fi.q7_ez_m 
+fi.close()
 
-# --- Axisymmetric b-field arrays must be 3d shape (nr+1,arb,nz+1) to load into Warp  
-s4_br_m = fzeros((s4_nr+1,1,s4_nz+1))  
-s4_br_m[:,0,:] = s4_br_m_in
-s4_bz_m = fzeros((s4_nr+1,1,s4_nz+1))
-s4_bz_m[:,0,:] = s4_bz_m_in
+q7_zlen = q7_z_m.max() - q7_z_m.min() 
 
-s4_nl_id = addnewbgrddataset(dx=s4_dr,dy=1.,zlength=s4_zlen,bx=s4_br_m,bz=s4_bz_m,rz = true)  # pass arb dy to avoid error trap  
+## --- nonlinear element vector potential data 
+##fi = PRpickle.PR('lat_s4.at.20140603.pkl') 
+#fi = PRpickle.PR('lat_s4.at.20141031.pkl') 
+##
+#if fi.s4_nz != s4_nz: raise Exception("S4: Nonlin Vector potential model nz not equal to nonlinear/linear model nz")
+#if fi.s4_nr != s4_nr: raise Exception("S4: Nonlin Vector potential model nr not equal to nonlinear model nr")
+#s4_at_m  = fi.s4_at_m
+#fi.close() 
 
-s4_aspect = s4_r_coil_i/s4_len_coil 
+## --- Axisymmetric b-field arrays must be 3d shape (nr+1,arb,nz+1) to load into Warp  
+#s4_br_m = fzeros((s4_nr+1,1,s4_nz+1))  
+#s4_br_m[:,0,:] = s4_br_m_in
+#s4_bz_m = fzeros((s4_nr+1,1,s4_nz+1))
+#s4_bz_m[:,0,:] = s4_bz_m_in
 
-# --- define solenoid s4 1 
-if s4p1_typ == "lin":
-  s4p1 = addnewmmlt(zs=s4p1_zc-s4_zlen/2.,ze=s4p1_zc+s4_zlen/2.,id=s4_lin_id,sc=s4p1_str) 
-elif s4p1_typ == "nl":
-  s4p1 = addnewbgrd(xs=0.,zs=s4p1_zc-s4_zlen/2.,ze=s4p1_zc+s4_zlen/2.,id=s4_nl_id,sc=s4p1_str)
+q7_nl_id = addnewegrddataset(dx=q7_dx,dy=q7_dy,zlength=q7_zlen,bx=q7_ex_m,by=q7_ey_m,bz=q7_ez_m)  # pass arb dy to avoid error trap  
+
+
+# --- define esq q7 1st triplet part 1 
+if q7t1p1_typ == "lin":
+  q7t1p1 = addnewmmlt(zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p1_str*q7t1p1_sign) 
+elif q7t1p1_typ == "nl":
+  q7t1p1 = addnewbgrd(xs=-0.1,ys=-0.1,zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p1_str*q7t1p1_sign) 
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
-  s4p1 = None
+  q7t1p1 = None
 
-# --- define solenoid s4 2 
-if s4p2_typ == "lin":
-  s4p2 = addnewmmlt(zs=s4p2_zc-s4_zlen/2.,ze=s4p2_zc+s4_zlen/2.,id=s4_lin_id,sc=s4p2_str) 
-elif s4p2_typ == "nl":
-  s4p2 = addnewbgrd(xs=0.,zs=s4p2_zc-s4_zlen/2.,ze=s4p2_zc+s4_zlen/2.,id=s4_nl_id,sc=s4p2_str)
+# --- define esq q7 1st triplet part 2
+if q7t1p2_typ == "lin":
+  q7t1p2 = addnewmmlt(zs=q7t1p2_zc-q7_zlen/2.,ze=q7t1p2_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p2_str*q7t1p2_sign) 
+elif q7t1p2_typ == "nl":
+  q7t1p2 = addnewbgrd(xs=-0.1,ys=-0.1,zs=q7t1p2_zc-q7_zlen/2.,ze=q7t1p2_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p2_str*q7t1p2_sign) 
 else:
-  print("Warning: No S4 2nd Solenoid Applied Fields Defined") 
-  s4p2 = None
+  print("Warning: No S4 1st Solenoid Applied Fields Defined") 
+  q7t1p2 = None
+
+# --- define esq q7 1st triplet part 3
+if q7t1p3_typ == "lin":
+  q7t1p3 = addnewmmlt(zs=q7t1p3_zc-q7_zlen/2.,ze=q7t1p3_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p3_str*q7t1p3_sign) 
+elif q7t1p3_typ == "nl":
+  q7t1p3 = addnewbgrd(xs=-0.1,ys=-0.1,zs=q7t1p3_zc-q7_zlen/2.,ze=q7t1p3_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p3_str*q7t1p3_sign) 
+else:
+  print("Warning: No S4 1st Solenoid Applied Fields Defined") 
+  q7t1p3 = None
 
 
 

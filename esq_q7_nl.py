@@ -150,29 +150,29 @@ df_ez = d_ez.tolist()[:]
 for i in range(len(df_x)):
 	if df_x[i] != 0:
 		df_x.append(-df_x[i])
-        df_y.append(df_y[i])
-        df_z.append(df_z[i])
-        df_ex.append(-df_ex[i])
-        df_ey.append(df_ey[i])
-        df_ez.append(df_ez[i])
+		df_y.append(df_y[i])
+		df_z.append(df_z[i])
+		df_ex.append(-df_ex[i])
+		df_ey.append(df_ey[i])
+		df_ez.append(df_ez[i])
 
 for i in range(len(df_y)):
 	if df_y[i] != 0:
 		df_x.append(df_x[i])
-        df_y.append(-df_y[i])
-        df_z.append(df_z[i])
-        df_ex.append(df_ex[i])
-        df_ey.append(-df_ey[i])
-        df_ez.append(df_ez[i])
+		df_y.append(-df_y[i])
+		df_z.append(df_z[i])
+		df_ex.append(df_ex[i])
+		df_ey.append(-df_ey[i])
+		df_ez.append(df_ez[i])
 
 for i in range(len(df_z)):
 	if df_z[i] != 0:
 		df_x.append(df_x[i])
-        df_y.append(df_y[i])
-        df_z.append(-df_z[i])
-        df_ex.append(df_ex[i])
-        df_ey.append(df_ey[i])
-        df_ez.append(-df_ez[i])
+		df_y.append(df_y[i])
+		df_z.append(-df_z[i])
+		df_ex.append(df_ex[i])
+		df_ey.append(df_ey[i])
+		df_ez.append(-df_ez[i])
 
 
 
@@ -207,7 +207,7 @@ z_m = z_mmin + dz*arange(0,nz+1,dtype=float)
 
 # Load field data in arrays 
 ex_m = fzeros((nx+1,ny+1,nz+1)) 
-ex_m = fzeros((nx+1,ny+1,nz+1)) 
+ey_m = fzeros((nx+1,ny+1,nz+1)) 
 ez_m = fzeros((nx+1,ny+1,nz+1)) 
 
 ix_m = nint((df_x - x_mmin)/dx)
@@ -251,7 +251,7 @@ ez_m.ravel(order='F').put(ii,df_ez)
 #fma() 
 
 # Save linear field data to an external binary array 
-fo = PWpickle.PW("q7.3d."+date+".pkl")
+fo = PWpickle.PW("lat_q7.3d."+date+".pkl")
 
 #fo.s4_len_coil   = len_coil
 #fo.s4_len_magnet = len_magnet
