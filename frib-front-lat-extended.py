@@ -296,16 +296,16 @@ d5_3d_id = addnewbgrddataset(dx=d5_3d_dx,dy=d5_3d_dy,zlength=d5_3d_zlen,bx=d5_3d
 # Makes the bend less tight than when the starting position is set to be 69.2 m
 
 d5p1_ideal_len = 1.0
-d5p1_zs_ideal = d5p1_zc - d5p1_ideal_len / 2
-d5p1_ze_ideal = d5p1_zc + d5p1_ideal_len / 2
+d5p1_zs = d5p1_zc - d5p1_ideal_len / 2
+d5p1_ze = d5p1_zc + d5p1_ideal_len / 2
 
 # --- define dipole d5 
 
 # --- ideal (uniform) field 
 if d5p1_typ == "ideal": 
-  bending_R = (d5p1_ze_ideal - d5p1_zs_ideal)/(pi/2.)
+  bending_R = (d5p1_ze - d5p1_zs)/(pi/2.)
   bending_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/bending_R
-  d5p1 = addnewdipo(zs = d5p1_zs_ideal, ze = d5p1_ze_ideal, by = bending_B)
+  d5p1 = addnewdipo(zs = d5p1_zs, ze = d5p1_ze, by = bending_B)
 # --- linear optic approximation field 
 elif d5p1_typ == "lin":
   print("Warning: No D5 1st Dipole Linear Applied Fields Defined")
@@ -330,9 +330,9 @@ d5p1_bend = True  # True or False: Add ideal bend to lattice
 
 if d5p1_bend:
   top.diposet = False     # turn off By that automatically generated with addnewbend()
-  equivalent_ideal_R = (d5p1_ze_ideal - d5p1_zs_ideal)/(pi/2.)
+  equivalent_ideal_R = (d5p1_ze - d5p1_zs)/(pi/2.)
   equivalent_ideal_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/equivalent_ideal_R
-  addnewbend(zs = d5p1_zs_ideal, ze = d5p1_ze_ideal, rc = equivalent_ideal_R)
+  addnewbend(zs = d5p1_zs, ze = d5p1_ze, rc = equivalent_ideal_R)
 
 
 dipole_exit = [[0.,0.],[0.,0.]]
@@ -576,7 +576,7 @@ array(
 [ecr_z_extr - 10.*cm, # z to the left of ECR extraction point ... beam should be launched to right  
  gag_zc - 20.90*cm,   # z of neut stop before grated gap, set where 1% of gap E_z field reached 
  gag_zc + 22.28*cm,   # z of neut stop after  grated gap, set where 1% of gap E_z field reached
- d5p1_ze_ideal        # z of where the 1st D5 dipole would ideally end   
+ d5p1_ze              # z of where the 1st D5 dipole would ideally end   
 ]    )
 
 sp_neut_frac = \
