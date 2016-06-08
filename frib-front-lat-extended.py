@@ -248,6 +248,16 @@ else:
   gag = None 
 
 
+
+
+
+
+
+
+
+
+
+
 # D5 Bending Dipole 
 
 # --- element specification 
@@ -279,16 +289,23 @@ d5_3d_id = addnewbgrddataset(dx=d5_3d_dx,dy=d5_3d_dy,zlength=d5_3d_zlen,bx=d5_3d
 # Starting and ending position of first ideal D5 dipole.
 # Also used to define the lattice bend
 
-d5p1_zs = 69.2 # may need to be revised upon obtaining lattice design data
-d5p1_ze = d5p1_zc + (d5p1_zc - d5p1_zs)
+#d5p1_zs = 69.2 # may need to be revised upon obtaining lattice design data
+#d5p1_ze = d5p1_zc + (d5p1_zc - d5p1_zs)
+
+# Define starting and ending position of 1st ideal D5 dipole using ideal length and centre position
+# Makes the bend less tight than when the starting position is set to be 69.2 m
+
+d5p1_ideal_len = 1.0
+d5p1_zs_ideal = d5p1_zc - d5p1_ideal_len / 2
+d5p1_ze_ideal = d5p1_zc + d5p1_ideal_len / 2
 
 # --- define dipole d5 
 
 # --- ideal (uniform) field 
 if d5p1_typ == "ideal": 
-  bending_R = (d5p1_ze - d5p1_zs)/(pi/2.)
+  bending_R = (d5p1_ze_ideal - d5p1_zs_ideal)/(pi/2.)
   bending_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/bending_R
-  d5p1 = addnewdipo(zs = d5p1_zs, ze = d5p1_ze, by = bending_B)
+  d5p1 = addnewdipo(zs = d5p1_zs_ideal, ze = d5p1_ze_ideal, by = bending_B)
 # --- linear optic approximation field 
 elif d5p1_typ == "lin":
   print("Warning: No D5 1st Dipole Linear Applied Fields Defined")
@@ -313,7 +330,24 @@ d5p1_bend = True  # True or False: Add ideal bend to lattice
 
 if d5p1_bend:
   top.diposet = False     # turn off By that automatically generated with addnewbend()
-  addnewbend(zs = d5p1_zs, ze = d5p1_ze, rc = (d5p1_ze - d5p1_zs)/(pi/2.))
+  equivalent_ideal_R = (d5p1_ze_ideal - d5p1_zs_ideal)/(pi/2.)
+  equivalent_ideal_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/equivalent_ideal_R
+  addnewbend(zs = d5p1_zs_ideal, ze = d5p1_ze_ideal, rc = equivalent_ideal_R)
+
+
+dipole_exit = [[0.,0.],[0.,0.]]
+cccounter = 0
+
+for ii in sp_target:
+	s = sp[ii]
+	species_R = sqrt( s.charge*Bias*2.*s.mass)/(s.charge)/ equivalent_ideal_B
+	offset = sqrt( species_R**2 - (species_R - equivalent_ideal_R)**2 ) - equivalent_ideal_R
+	centroid_angle = arccos( 1 - equivalent_ideal_R / species_R ) - pi/2
+	
+	dipole_exit[cccounter][0] = offset
+	dipole_exit[cccounter][1] = centroid_angle*sign(offset)
+	
+	cccounter += 1
 
 
 
@@ -398,7 +432,9 @@ q7_ey_m  = fi.q7_ey_m
 q7_ez_m  = fi.q7_ez_m 
 fi.close()
 
-q7_zlen = q7_z_m.max() - q7_z_m.min() 
+q7_zlen = q7_z_m.max() - q7_z_m.min()
+q7_x_m_min = q7_x_m.min()
+q7_y_m_min = q7_y_m.min()
 
 ## --- nonlinear element vector potential data 
 ##fi = PRpickle.PR('lat_s4.at.20140603.pkl') 
@@ -422,7 +458,7 @@ q7_nl_id = addnewegrddataset(dx=q7_dx,dy=q7_dy,zlength=q7_zlen,ex=q7_ex_m,ey=q7_
 if q7t1p1_typ == "lin":
   q7t1p1 = addnewmmlt(zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p1_str*q7t1p1_sign) 
 elif q7t1p1_typ == "nl":
-  q7t1p1 = addnewegrd(xs=-0.1,ys=-0.1,zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p1_str*q7t1p1_sign) 
+  q7t1p1 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p1_str*q7t1p1_sign) 
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p1 = None
@@ -431,7 +467,7 @@ else:
 if q7t1p2_typ == "lin":
   q7t1p2 = addnewmmlt(zs=q7t1p2_zc-q7_zlen/2.,ze=q7t1p2_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p2_str*q7t1p2_sign) 
 elif q7t1p2_typ == "nl":
-  q7t1p2 = addnewegrd(xs=-0.1,ys=-0.1,zs=q7t1p2_zc-q7_zlen/2.,ze=q7t1p2_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p2_str*q7t1p2_sign) 
+  q7t1p2 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t1p2_zc-q7_zlen/2.,ze=q7t1p2_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p2_str*q7t1p2_sign) 
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p2 = None
@@ -440,7 +476,7 @@ else:
 if q7t1p3_typ == "lin":
   q7t1p3 = addnewmmlt(zs=q7t1p3_zc-q7_zlen/2.,ze=q7t1p3_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p3_str*q7t1p3_sign) 
 elif q7t1p3_typ == "nl":
-  q7t1p3 = addnewegrd(xs=-0.1,ys=-0.1,zs=q7t1p3_zc-q7_zlen/2.,ze=q7t1p3_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p3_str*q7t1p3_sign) 
+  q7t1p3 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t1p3_zc-q7_zlen/2.,ze=q7t1p3_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p3_str*q7t1p3_sign) 
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p3 = None
@@ -448,20 +484,55 @@ else:
 
 
 
+# Scrapers
 
+## End plates of the ESQs in the 1st triplet
 
+endplate_len = 1*mm
+endplate_aperture = 65*mm
 
+q7t1_endplate_1 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p1 - 19.5*mm)
+q7t1_endplate_2 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p1 + 19.5*mm)
+q7t1_endplate_3 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p2 - 19.5*mm)
+q7t1_endplate_4 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p2 + 19.5*mm)
+q7t1_endplate_5 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p3 - 19.5*mm)
+q7t1_endplate_6 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p3 + 19.5*mm)
 
+## Slits between ESQ in the 1st triplet
 
+# Slit sizes are arbitrarily chosen at present, only making sure they extend into the beam tube in transverse directions
+# The opening size in x is based on drawings
 
+q7t1_mid_12 = (q7t1p1_zc+q7t1p2_zc)/2  # mid-point between 1st and 2nd ESQ 
+q7t1_mid_23 = (q7t1p2_zc+q7t1p3_zc)/2  # mid-point between 2nd and 3rd ESQ 
 
+slits1_x_opening = 7*cm
+slits2_x_opening = 9*cm
+slit_xsize = 8*cm
+slit_ysize = 15*cm
+slit_zsize = 0.1*cm
 
+q7t1_slits1_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = (slits1_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_12)
+q7t1_slits1_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = -(slits1_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_12)
+q7t1_slits2_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = (slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
+q7t1_slits2_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = -(slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
 
+#scraper = ParticleScraper([q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6])
 
+scraperlist = [
+q7t1_endplate_1,
+q7t1_endplate_2,
+q7t1_endplate_3,
+q7t1_endplate_4,
+q7t1_endplate_5,
+q7t1_endplate_6,
+q7t1_slits1_xplus,
+q7t1_slits1_xminus,
+q7t1_slits2_xplus,
+q7t1_slits2_xminus
+]
 
-
-
-
+scraper = ParticleScraper(scraperlist)
 
 
 
@@ -504,14 +575,16 @@ sp_neut_z = \
 array(
 [ecr_z_extr - 10.*cm, # z to the left of ECR extraction point ... beam should be launched to right  
  gag_zc - 20.90*cm,   # z of neut stop before grated gap, set where 1% of gap E_z field reached 
- gag_zc + 22.28*cm    # z of neut stop after  grated gap, set where 1% of gap E_z field reached
+ gag_zc + 22.28*cm,   # z of neut stop after  grated gap, set where 1% of gap E_z field reached
+ d5p1_ze_ideal        # z of where the 1st D5 dipole would ideally end   
 ]    )
 
 sp_neut_frac = \
 array(
 [0.75, 
  0., 
- 0.75
+ 0.75,
+ 0.
 ]    )
 
 neut_z    = {key: sp_neut_z    for key in sp.keys()}
