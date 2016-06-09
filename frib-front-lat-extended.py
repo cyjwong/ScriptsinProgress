@@ -512,10 +512,10 @@ valve_xsize = 10*cm
 valve_ysize = 10*cm
 
 
-valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_x_size)/2, ycent = 0, zcent = valve_zc)
-valve_x_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = -(valve_x_opening + valve_x_size)/2, ycent = 0, zcent = valve_zc)
-valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = (valve_y_opening + valve_y_size)/2, xcent = 0, zcent = valve_zc)
-valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = -(valve_y_opening + valve_y_size)/2, xcent = 0, zcent = valve_zc)
+valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
+valve_x_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = -(valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
+valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = (valve_y_opening + valve_ysize)/2, xcent = 0, zcent = valve_zc)
+valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = -(valve_y_opening + valve_ysize)/2, xcent = 0, zcent = valve_zc)
 
 ## End plates of the ESQs in the 1st triplet
 
