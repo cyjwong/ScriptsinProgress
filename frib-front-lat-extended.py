@@ -496,7 +496,7 @@ added_len = 8*cm
 d5p1_aperture_xplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
 d5p1_aperture_xminus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = -76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
 d5p1_aperture_yplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = 76*mm, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_yplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -76*mm, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yminus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -76*mm, zcent = d5p1_zc + added_len/2)
 
 d5p1_aperture = [d5p1_aperture_xplus, d5p1_aperture_xminus, d5p1_aperture_yplus, d5p1_aperture_yminus]
 
