@@ -529,6 +529,8 @@ q7t1_endplate_4 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p2_zc
 q7t1_endplate_5 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p3_zc - 19.5*mm)
 q7t1_endplate_6 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p3_zc + 19.5*mm)
 
+q7t1_endplates = [q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6]
+
 ## Slits between ESQ in the 1st triplet
 
 # Slit sizes are arbitrarily chosen at present, only making sure they extend into the beam tube in transverse directions
@@ -548,6 +550,7 @@ q7t1_slits1_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zs
 q7t1_slits2_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = (slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
 q7t1_slits2_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = -(slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
 
+q7t1_slits = [q7t1_slits1_xplus,q7t1_slits1_xminus,q7t1_slits2_xplus,q7t1_slits2_xminus]
 
 # Q7 Electrodes
 
@@ -575,19 +578,7 @@ def q7_electrodes_conductor(zcenter):
 
 #scraper = ParticleScraper([q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6])
 
-scraperlist = [
-q7t1_endplate_1,
-q7t1_endplate_2,
-q7t1_endplate_3,
-q7t1_endplate_4,
-q7t1_endplate_5,
-q7t1_endplate_6,
-q7t1_slits1_xplus,
-q7t1_slits1_xminus,
-q7t1_slits2_xplus,
-q7t1_slits2_xminus
-]
-+ d5p1_aperture + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
+scraperlist = q7t1_endplates + q7t1_slits + d5p1_aperture + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
 
 scraper = ParticleScraper(scraperlist)
 
