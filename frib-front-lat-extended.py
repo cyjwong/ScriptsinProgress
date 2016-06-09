@@ -508,8 +508,8 @@ valve_thickness = 2*mm
 valve_zc = q7t1p1_zc - 40*mm
 
 # These sizes are arbitrary, 
-valve_x_size = 10*cm
-valve_y_size = 10*cm
+valve_xsize = 10*cm
+valve_ysize = 10*cm
 
 
 valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_x_size)/2, ycent = 0, zcent = valve_zc)
