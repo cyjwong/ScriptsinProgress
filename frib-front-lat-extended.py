@@ -582,7 +582,7 @@ scraperlist = q7t1_endplates + q7t1_slits + d5p1_aperture + q7_electrodes_conduc
 
 scraper = ParticleScraper(scraperlist)
 
-scraper.registerconductor(scaperlist)
+#scraper.registerconductor(scaperlist)
 
 
 
