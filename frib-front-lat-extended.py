@@ -493,10 +493,10 @@ else:
 
 added_len = 8*cm
 
-d5p1_aperture_xplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_xminus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = -76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_yplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = 76*mm, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_yminus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -76*mm, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_xplus = Box(xsize = 2*mm, ysize = 120*mm, zsize = d5p1_ideal_len + added_len, xcent = 76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_xminus = Box(xsize = 2*mm, ysize = 120*mm, zsize = d5p1_ideal_len + added_len, xcent = -76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yplus = Box(xsize = 150*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = 61*mm, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yminus = Box(xsize = 150*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -61*mm, zcent = d5p1_zc + added_len/2)
 
 d5p1_aperture = [d5p1_aperture_xplus, d5p1_aperture_xminus, d5p1_aperture_yplus, d5p1_aperture_yminus]
 
@@ -508,14 +508,16 @@ valve_thickness = 2*mm
 valve_zc = q7t1p1_zc - 40*mm
 
 # These sizes are arbitrary, 
-valve_xsize = 10*cm
-valve_ysize = 10*cm
+valve_xsize = 15*cm
+valve_ysize = 15*cm
 
 
 valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
 valve_x_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = -(valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
-valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = (valve_y_opening + valve_ysize)/2, xcent = 0, zcent = valve_zc)
-valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = -(valve_y_opening + valve_ysize)/2, xcent = 0, zcent = valve_zc)
+valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = 0, ycent = (valve_y_opening + valve_ysize)/2, zcent = valve_zc)
+valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = 0, ycent = -(valve_y_opening + valve_ysize)/2, zcent = valve_zc)
+
+gate_valve = [valve_x_plus, valve_x_minus, valve_y_plus, valve_y_minus]
 
 ## End plates of the ESQs in the 1st triplet
 
@@ -578,7 +580,7 @@ def q7_electrodes_conductor(zcenter):
 
 #scraper = ParticleScraper([q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6])
 
-scraperlist = q7t1_endplates + q7t1_slits + d5p1_aperture + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
+scraperlist = q7t1_endplates + q7t1_slits + d5p1_aperture + gate_valve + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
 
 scraper = ParticleScraper(scraperlist)
 
