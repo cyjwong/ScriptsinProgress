@@ -76,12 +76,12 @@ diag_part_z = array([
   d5p1_zc,
   (d5p1_zc+d5p1_ze)/2,
   d5p1_ze,
-  d5p1_ze+20.*cm,
-  d5p1_ze+40.*cm,
-  d5p1_ze+60.*cm,
-  d5p1_ze+80.*cm,
-  d5p1_ze+100.*cm,
-  d5p1_ze+120.*cm,
+  valve_zc + 2*mm,
+  q7t1p1_zc,
+  q7t1_mid_12 + 2*mm,
+  q7t1p2_zc,
+  q7t1_mid_23 + 2*mm,
+  q7t1p3_zc,
   z_adv]) 
 
 diag_part_z_name = [ 
@@ -102,12 +102,12 @@ diag_part_z_name = [
   "D5 Dipole #1: z-Center",
   "D5 Dipole #1: 3/4 of dipole length",
   "D5 Dipole #1: z-end",
-  "d5p1_ze+20.*cm",
-  "d5p1_ze+40.*cm,",
-  "d5p1_ze+60.*cm",
-  "d5p1_ze+80.*cm",
-  "d5p1_ze+100.*cm,,",
-  "d5p1_ze+120.*cm,",
+  "after gate valve",
+  "1st Q7 ESQ Triplet #1: z-Center",
+  "after slits between Q7 #1 and #2",
+  "1st Q7 ESQ Triplet #2: z-Center",
+  "after slits between Q7 #2 and #3",
+  "1st Q7 ESQ Triplet #3: z-Center",
   "Final position" 
                    ]      
 

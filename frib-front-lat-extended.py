@@ -486,6 +486,37 @@ else:
 
 # Scrapers
 
+
+## Rectangular aperture in D5 Dipole:
+
+# Include an additional 8cm of rectangular aperture after 1m long D5 Dipole
+
+added_len = 8*cm
+
+d5p1_aperture_xplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_xminus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = -76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = 76*mm, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yplus = Box(xsize = 2*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -76*mm, zcent = d5p1_zc + added_len/2)
+
+d5p1_aperture = [d5p1_aperture_xplus, d5p1_aperture_xminus, d5p1_aperture_yplus, d5p1_aperture_yminus]
+
+## Gate valve
+
+valve_x_opening = 7*cm
+valve_y_opening = 10*cm
+valve_thickness = 2*mm
+valve_zc = q7t1p1_zc - 40*mm
+
+# These sizes are arbitrary, 
+valve_x_size = 10*cm
+valve_y_size = 10*cm
+
+
+valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_x_size)/2, ycent = 0, zcent = valve_zc)
+valve_x_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = -(valve_x_opening + valve_x_size)/2, ycent = 0, zcent = valve_zc)
+valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = (valve_y_opening + valve_y_size)/2, xcent = 0, zcent = valve_zc)
+valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, ycent = -(valve_y_opening + valve_y_size)/2, xcent = 0, zcent = valve_zc)
+
 ## End plates of the ESQs in the 1st triplet
 
 endplate_len = 1*mm
@@ -517,6 +548,31 @@ q7t1_slits1_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zs
 q7t1_slits2_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = (slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
 q7t1_slits2_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = -(slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
 
+
+# Q7 Electrodes
+
+# function returns a list of 4 cylinders that approximate the q7 electrodes
+# required input: center position of the electrode
+
+def q7_electrodes_conductor(zcenter):
+	q7_length = 200*mm
+	
+	# approximate each electrode by a cylinder
+	cylinder_offset = 170*mm
+	cylinder_radius = 95*mm
+	
+	electrode_xplus = ZCylinderOut(cylinder_radius, q7_length, xcent = cylinder_offset, zcent= zcenter)
+	electrode_xminus = ZCylinderOut(cylinder_radius, q7_length, xcent = -cylinder_offset, zcent= zcenter)
+	electrode_yplus = ZCylinderOut(cylinder_radius, q7_length, ycent = cylinder_offset, zcent= zcenter)
+	electrode_yminus = ZCylinderOut(cylinder_radius, q7_length, ycent = -cylinder_offset, zcent= zcenter)
+	
+	return [electrode_xplus, electrode_xminus, electrode_yplus, electrode_yminus]
+
+
+
+
+
+
 #scraper = ParticleScraper([q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6])
 
 scraperlist = [
@@ -531,11 +587,11 @@ q7t1_slits1_xminus,
 q7t1_slits2_xplus,
 q7t1_slits2_xminus
 ]
++ d5p1_aperture + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
 
 scraper = ParticleScraper(scraperlist)
 
-
-
+scraper.registerconductor(scaperlist)
 
 
 
