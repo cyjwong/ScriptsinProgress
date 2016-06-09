@@ -508,8 +508,8 @@ valve_thickness = 2*mm
 valve_zc = q7t1p1_zc - 40*mm
 
 # These sizes are arbitrary, 
-valve_xsize = 15*cm
-valve_ysize = 15*cm
+valve_xsize = 7*cm
+valve_ysize = 10*cm
 
 
 valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
@@ -566,10 +566,10 @@ def q7_electrodes_conductor(zcenter):
 	cylinder_offset = 170*mm
 	cylinder_radius = 95*mm
 	
-	electrode_xplus = ZCylinderOut(cylinder_radius, q7_length, xcent = cylinder_offset, zcent= zcenter)
-	electrode_xminus = ZCylinderOut(cylinder_radius, q7_length, xcent = -cylinder_offset, zcent= zcenter)
-	electrode_yplus = ZCylinderOut(cylinder_radius, q7_length, ycent = cylinder_offset, zcent= zcenter)
-	electrode_yminus = ZCylinderOut(cylinder_radius, q7_length, ycent = -cylinder_offset, zcent= zcenter)
+	electrode_xplus = ZCylinder(cylinder_radius, q7_length, xcent = cylinder_offset, zcent= zcenter)
+	electrode_xminus = ZCylinder(cylinder_radius, q7_length, xcent = -cylinder_offset, zcent= zcenter)
+	electrode_yplus = ZCylinder(cylinder_radius, q7_length, ycent = cylinder_offset, zcent= zcenter)
+	electrode_yminus = ZCylinder(cylinder_radius, q7_length, ycent = -cylinder_offset, zcent= zcenter)
 	
 	return [electrode_xplus, electrode_xminus, electrode_yplus, electrode_yminus]
 
