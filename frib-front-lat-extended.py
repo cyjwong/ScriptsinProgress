@@ -482,7 +482,41 @@ else:
 
 
 
-# Scrapers
+### Scrapers ###
+
+## Particles are not scraped if scraper is too thin w.r.t. simulation step size ##
+# From trial and error: use 4mm-thick slits, 10mm-thick walls for 2mm step size
+
+
+
+## Beam pipe (where the aperture is circular)
+
+r_p_up   = 8.00*cm  # aperture   upstream of grated gap [m]
+r_p_down = 7.62*cm  # aperture downstream of grated gap [m]
+
+post_d5p1_pipe_r = 7.5*cm
+post_d5p1_pipe_zs = d5p1_ze + 8*cm
+post_d5p1_pipe_ze = d5p1_ze + 8*cm +  229*mm
+
+q7t1_pipe_r = 12.4*cm
+q7t1_pipe_zs = post_d5p1_pipe_ze
+q7t1_pipe_ze = q7t1_pipe_zs + 952*mm
+
+r_ap   = array([r_p_up,               gag_rp,       r_p_down,   post_d5p1_pipe_r,     12.4*cm,       7.5*cm  ])
+v_ap   = array([SourceBias+StandBias, StandBias/2., 0.,         0.,                   0.,            0.]) 
+z_ap_l = array([ecr_z_extr,           gag_col_zs,   gag_col_ze, post_d5p1_pipe_zs,    q7t1_pipe_zs,  q7t1_pipe_ze])
+z_ap_u = array([gag_col_zs,           gag_col_ze,   d5p1_zs,    post_d5p1_pipe_ze,    q7t1_pipe_ze,  q7t1_pipe_ze + 300*mm])
+
+beampipe = [] 
+for i in range(len(r_ap)):
+  rp = r_ap[i] 
+  v  = v_ap[i] 
+  zl = z_ap_l[i] 
+  zu = z_ap_u[i]
+  #
+  beampipe.append( ZCylinderOut(radius=rp,zlower=zl,zupper=zu,voltage=v,condid="next") )
+
+r_p = max(r_ap)   # Max aperture in simulations 
 
 
 ## Rectangular aperture in D5 Dipole:
@@ -491,10 +525,10 @@ else:
 
 added_len = 8*cm
 
-d5p1_aperture_xplus = Box(xsize = 2*mm, ysize = 120*mm, zsize = d5p1_ideal_len + added_len, xcent = 76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_xminus = Box(xsize = 2*mm, ysize = 120*mm, zsize = d5p1_ideal_len + added_len, xcent = -76*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_yplus = Box(xsize = 150*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = 61*mm, zcent = d5p1_zc + added_len/2)
-d5p1_aperture_yminus = Box(xsize = 150*mm, ysize = 2*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -61*mm, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_xplus = Box(xsize = 10*mm, ysize = 120*mm, zsize = d5p1_ideal_len + added_len, xcent = 80*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_xminus = Box(xsize = 10*mm, ysize = 120*mm, zsize = d5p1_ideal_len + added_len, xcent = -80*mm, ycent = 0, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yplus = Box(xsize = 150*mm, ysize = 10*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = 65*mm, zcent = d5p1_zc + added_len/2)
+d5p1_aperture_yminus = Box(xsize = 150*mm, ysize = 10*mm, zsize = d5p1_ideal_len + added_len, xcent = 0, ycent = -65*mm, zcent = d5p1_zc + added_len/2)
 
 d5p1_aperture = [d5p1_aperture_xplus, d5p1_aperture_xminus, d5p1_aperture_yplus, d5p1_aperture_yminus]
 
@@ -502,7 +536,7 @@ d5p1_aperture = [d5p1_aperture_xplus, d5p1_aperture_xminus, d5p1_aperture_yplus,
 
 valve_x_opening = 7*cm
 valve_y_opening = 10*cm
-valve_thickness = 2*mm
+valve_len = 4*mm
 valve_zc = q7t1p1_zc - 140*mm
 
 # These sizes are arbitrary, 
@@ -510,16 +544,16 @@ valve_xsize = 7*cm
 valve_ysize = 10*cm
 
 
-valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = (valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
-valve_x_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = -(valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
-valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = 0, ycent = (valve_y_opening + valve_ysize)/2, zcent = valve_zc)
-valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_thickness, xcent = 0, ycent = -(valve_y_opening + valve_ysize)/2, zcent = valve_zc)
+valve_x_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_len, xcent = (valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
+valve_x_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_len, xcent = -(valve_x_opening + valve_xsize)/2, ycent = 0, zcent = valve_zc)
+valve_y_plus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_len, xcent = 0, ycent = (valve_y_opening + valve_ysize)/2, zcent = valve_zc)
+valve_y_minus = Box(xsize = valve_xsize, ysize = valve_ysize, zsize = valve_len, xcent = 0, ycent = -(valve_y_opening + valve_ysize)/2, zcent = valve_zc)
 
 gate_valve = [valve_x_plus, valve_x_minus, valve_y_plus, valve_y_minus]
 
 ## End plates of the ESQs in the 1st triplet
 
-endplate_len = 1*mm
+endplate_len = 4*mm
 endplate_aperture = 65*mm
 
 q7t1_endplate_1 = ZCylinderOut(endplate_aperture, endplate_len, zcent= q7t1p1_zc - 19.5*mm)
@@ -543,12 +577,12 @@ slits1_x_opening = 7*cm
 slits2_x_opening = 9*cm
 slit_xsize = 8*cm
 slit_ysize = 15*cm
-slit_zsize = 0.1*cm
+slit_len = 4*mm
 
-q7t1_slits1_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = (slits1_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_12)
-q7t1_slits1_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = -(slits1_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_12)
-q7t1_slits2_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = (slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
-q7t1_slits2_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_zsize, xcent = -(slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
+q7t1_slits1_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_len, xcent = (slits1_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_12)
+q7t1_slits1_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_len, xcent = -(slits1_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_12)
+q7t1_slits2_xplus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_len, xcent = (slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
+q7t1_slits2_xminus = Box(xsize = slit_xsize, ysize = slit_ysize, zsize = slit_len, xcent = -(slits2_x_opening + slit_xsize)/2, ycent = 0, zcent = q7t1_mid_23)
 
 q7t1_slits = [q7t1_slits1_xplus,q7t1_slits1_xminus,q7t1_slits2_xplus,q7t1_slits2_xminus]
 
@@ -578,7 +612,7 @@ def q7_electrodes_conductor(zcenter):
 
 #scraper = ParticleScraper([q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6])
 
-scraperlist = d5p1_aperture + gate_valve + q7t1_endplates + q7t1_slits + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
+scraperlist = beampipe + d5p1_aperture + gate_valve + q7t1_endplates + q7t1_slits + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
 
 scraper = ParticleScraper(scraperlist)
 
@@ -661,33 +695,33 @@ def rho_neut_f(z,s):
 #     consistent reference potential. 
 #   
 
-r_p_up   = 8.00*cm  # aperture   upstream of grated gap [m]
-r_p_down = 7.62*cm  # aperture downstream of grated gap [m]
+#r_p_up   = 8.00*cm  # aperture   upstream of grated gap [m]
+#r_p_down = 7.62*cm  # aperture downstream of grated gap [m]
 
-r_ap   = array([r_p_up,               gag_rp,       r_p_down  ])
-v_ap   = array([SourceBias+StandBias, StandBias/2., 0.        ]) 
-z_ap_l = array([ecr_z_extr,           gag_col_zs,   gag_col_ze])
-z_ap_u = array([gag_col_zs,           gag_col_ze,   d5p1_zc   ])
+#r_ap   = array([r_p_up,               gag_rp,       r_p_down  ])
+#v_ap   = array([SourceBias+StandBias, StandBias/2., 0.        ]) 
+#z_ap_l = array([ecr_z_extr,           gag_col_zs,   gag_col_ze])
+#z_ap_u = array([gag_col_zs,           gag_col_ze,   d5p1_zc   ])
 
-r_p = max(r_ap)   # Max aperture in simulations 
+#r_p = max(r_ap)   # Max aperture in simulations 
 
-def aperture_r(z):
-  index = sum(where(z/z_ap_l >= 1.,1,0))-1 
-  if index < 0: index = 0
-  # 
-  return(r_ap[index])  
+#def aperture_r(z):
+  #index = sum(where(z/z_ap_l >= 1.,1,0))-1 
+  #if index < 0: index = 0
+  ## 
+  #return(r_ap[index])  
 
-aperture = [] 
-for i in range(len(r_ap)):
-  rp = r_ap[i] 
-  v  = v_ap[i] 
-  zl = z_ap_l[i] 
-  zu = z_ap_u[i]
-  #
-  aperture.append( ZCylinderOut(radius=rp,zlower=zl,zupper=zu,condid="next") )
+#aperture = [] 
+#for i in range(len(r_ap)):
+  #rp = r_ap[i] 
+  #v  = v_ap[i] 
+  #zl = z_ap_l[i] 
+  #zu = z_ap_u[i]
+  ##
+  #aperture.append( ZCylinderOut(radius=rp,zlower=zl,zupper=zu,condid="next") )
 
-# --- Add a circular aperture particle scraper at pipe radius aperture. 
-#       Could also use ParticleScraper(conductors=aperture) but 
-#       setting prwall is faster for a simple cylinder. 
-top.prwall = r_p    # reset this later consistent with actual aperture in range simulated in advances 
+## --- Add a circular aperture particle scraper at pipe radius aperture. 
+##       Could also use ParticleScraper(conductors=aperture) but 
+##       setting prwall is faster for a simple cylinder. 
+#top.prwall = r_p    # reset this later consistent with actual aperture in range simulated in advances 
 
