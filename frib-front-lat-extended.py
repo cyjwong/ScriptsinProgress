@@ -392,8 +392,6 @@ q7t1p3_str = 10000 # [V]
 q7t1p3_sign = 1    # +1 for x_quad, -1 for y_quad
 q7t1p3_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z field  
 
-
-
 ## --- linear element data  
 ##fi = PRpickle.PR("lat_s4.lin.20140603.pkl")
 #fi = PRpickle.PR("lat_s4.lin.20141031.pkl")
@@ -505,7 +503,7 @@ d5p1_aperture = [d5p1_aperture_xplus, d5p1_aperture_xminus, d5p1_aperture_yplus,
 valve_x_opening = 7*cm
 valve_y_opening = 10*cm
 valve_thickness = 2*mm
-valve_zc = q7t1p1_zc - 40*mm
+valve_zc = q7t1p1_zc - 140*mm
 
 # These sizes are arbitrary, 
 valve_xsize = 7*cm
@@ -560,16 +558,16 @@ q7t1_slits = [q7t1_slits1_xplus,q7t1_slits1_xminus,q7t1_slits2_xplus,q7t1_slits2
 # required input: center position of the electrode
 
 def q7_electrodes_conductor(zcenter):
-	q7_length = 200*mm
+	q7_electrode_len = 200*mm
 	
 	# approximate each electrode by a cylinder
 	cylinder_offset = 170*mm
 	cylinder_radius = 95*mm
 	
-	electrode_xplus = ZCylinder(cylinder_radius, q7_length, xcent = cylinder_offset, zcent= zcenter)
-	electrode_xminus = ZCylinder(cylinder_radius, q7_length, xcent = -cylinder_offset, zcent= zcenter)
-	electrode_yplus = ZCylinder(cylinder_radius, q7_length, ycent = cylinder_offset, zcent= zcenter)
-	electrode_yminus = ZCylinder(cylinder_radius, q7_length, ycent = -cylinder_offset, zcent= zcenter)
+	electrode_xplus = ZCylinder(cylinder_radius, q7_electrode_len, xcent = cylinder_offset, zcent= zcenter)
+	electrode_xminus = ZCylinder(cylinder_radius, q7_electrode_len, xcent = -cylinder_offset, zcent= zcenter)
+	electrode_yplus = ZCylinder(cylinder_radius, q7_electrode_len, ycent = cylinder_offset, zcent= zcenter)
+	electrode_yminus = ZCylinder(cylinder_radius, q7_electrode_len, ycent = -cylinder_offset, zcent= zcenter)
 	
 	return [electrode_xplus, electrode_xminus, electrode_yplus, electrode_yminus]
 
@@ -580,7 +578,7 @@ def q7_electrodes_conductor(zcenter):
 
 #scraper = ParticleScraper([q7t1_endplate_1,q7t1_endplate_2,q7t1_endplate_3,q7t1_endplate_4,q7t1_endplate_5,q7t1_endplate_6])
 
-scraperlist = q7t1_endplates + q7t1_slits + d5p1_aperture + gate_valve + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
+scraperlist = d5p1_aperture + gate_valve + q7t1_endplates + q7t1_slits + q7_electrodes_conductor(q7t1p1_zc) + q7_electrodes_conductor(q7t1p2_zc) + q7_electrodes_conductor(q7t1p3_zc)
 
 scraper = ParticleScraper(scraperlist)
 
