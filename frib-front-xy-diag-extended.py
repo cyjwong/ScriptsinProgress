@@ -30,7 +30,8 @@ top.itmomnts[0:3] = [0,max_diag_step,top.nhist]   # do loop ranges for moments
 #     use these ranges.  
 #      max/min x,y   plot coordinates (m) 
 #      max/min x',y' plot coordinates (rad)
-l_diag = r_p
+#l_diag = r_p
+l_diag = 75*mm
 top.xplmax =  l_diag  
 top.xplmin = -l_diag
 top.yplmax =  l_diag
