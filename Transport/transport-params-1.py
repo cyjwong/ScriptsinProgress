@@ -38,7 +38,7 @@ plotymax = "e"
 
 # Center of 1st Solenoid
 
-s4p2_zc  = PeriodLength / 2.
+s4p2_zc  = 0.3
 
 # Number of steps per period
 

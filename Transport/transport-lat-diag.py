@@ -41,13 +41,14 @@ def dl_getappliedfields(r):
 #  * Plots over extent of mesh definition by default so should be ranged appropriately to see structure  
 #  * ONLY USED if nonlinear description of elements set 
 
-plotbgrd(ib=s4_nl_id,component='z',ix=0,iy=0,titles=false)
-ptitles("NL S4 Solenoid Data: Scaled on-axis Bz vs z","z [m]","Bz [1]",)
-fma()
-
-plotbgrd(ib=gag[0],component='x',ix=s4_nr/2,iy=0,titles=false)
-ptitles("NL S4 Solenoid Data: Scaled Br vs z at r = %s mm"%(s4_r_m[s4_nr/2]/mm),"z [m]","Br [1]",)
-fma()
+if s4p2_typ == "nl":
+	plotbgrd(ib=s4_nl_id,component='z',ix=0,iy=0,titles=false)
+	ptitles("NL S4 Solenoid Data: Scaled on-axis Bz vs z","z [m]","Bz [1]",)
+	fma()
+	
+	plotbgrd(ib=gag[0],component='x',ix=s4_nr/2,iy=0,titles=false)
+	ptitles("NL S4 Solenoid Data: Scaled Br vs z at r = %s mm"%(s4_r_m[s4_nr/2]/mm),"z [m]","Br [1]",)
+	fma()
 
 ## Nonlinear Grated Accel Gap using Warp built-in script to plot gridded field elements 
 ##  * Plots over extent of mesh definition by default so should be ranged appropriately to see structure  

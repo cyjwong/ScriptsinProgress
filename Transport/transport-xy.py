@@ -208,7 +208,7 @@ r_y = maxnd(ry.values())
 #
 #  Read in lattice description from auxillary script file 
 
-execfile("frib-front-lat.py") 
+execfile("transport-lat.py") 
 
 
 # Define transverse simulation grid
@@ -303,7 +303,7 @@ if single_particle: top.depos = "none"
 package("wxy"); generate()
 
 # Make diagnostics for applied lattice fields 
-execfile("frib-front-lat-diag.py") 
+execfile("transport-lat-diag.py") 
 
 # Install conducting aperture on mesh 
 installconductors(aperture,dfill=largepos)

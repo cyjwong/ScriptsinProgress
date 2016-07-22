@@ -759,4 +759,4 @@ def rho_neut_f(z,s):
 ##       setting prwall is faster for a simple cylinder. 
 top.prwall = r_p    # reset this later consistent with actual aperture in range simulated in advances 
 
-aperture = ZCylinderOut(radius=r_p, length=largepos, zcent=L_p/2., condid="next")
+aperture = ZCylinderOut(radius=r_p, length=largepos, zcent=PeriodLength/2., condid="next")
