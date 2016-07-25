@@ -7,7 +7,7 @@
 
 
 # Lattice periodicity  
-top.zlatperi  = largepos # periodicity length [m]  
+top.zlatperi  = PeriodLength # periodicity length [m]  
 top.zlatstrt  = 0.       # z of lattice start; added to element z's [m] 
                          #   (can use to change lattice phase) 
 
@@ -132,14 +132,14 @@ s4_aspect = s4_r_coil_i/s4_len_coil
   #print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   #s4p1 = None
 
-for ii in range(NumberofPeriods+2):
-	if s4p2_typ == "lin":
-	  s4p2 = addnewmmlt(zs=s4p2_zc+(ii-1)*PeriodLength-s4_zlen/2.,ze=s4p2_zc+(ii-1)*PeriodLength+s4_zlen/2.,id=s4_lin_id,sc=s4p2_str) 
-	elif s4p2_typ == "nl":
-	  s4p2 = addnewbgrd(xs=0.,zs=s4p2_zc+(ii-1)*PeriodLength-s4_zlen/2.,ze=s4p2_zc+(ii-1)*PeriodLength+s4_zlen/2.,id=s4_nl_id,sc=s4p2_str)
-	else:
-	  print("Warning: No S4 2nd Solenoid Applied Fields Defined") 
-	  s4p2 = None
+# --- define solenoid s4 2 
+if s4p2_typ == "lin":
+  s4p2 = addnewmmlt(zs=s4p2_zc-s4_zlen/2.,ze=s4p2_zc+s4_zlen/2.,id=s4_lin_id,sc=s4p2_str) 
+elif s4p2_typ == "nl":
+  s4p2 = addnewbgrd(xs=0.,zs=s4p2_zc-s4_zlen/2.,ze=s4p2_zc+s4_zlen/2.,id=s4_nl_id,sc=s4p2_str)
+else:
+  print("Warning: No S4 2nd Solenoid Applied Fields Defined") 
+  s4p2 = None
 
 # --- Define vector potential function for both linear and nonlinear solenoid magnetic fields  
 def getatheta(r):
@@ -184,31 +184,8 @@ def getatheta(r):
     else:
       raise Exception("Vector Potential: S4.2 not defined")
     at += at_scratch
-
-  if zzz >= s4p2_zc-PeriodLength-s4_zlen/2. and zzz <= s4p2_zc-PeriodLength+s4_zlen/2.:
-    # --- contribution from 2nd s4
-    if s4p2_typ == "lin": 
-      getgrid1d(n,z,at_scratch,s4_nz,s4p2_str*s4_bz0_m,s4p2_zc-s4_zlen/2.,s4p2_zc+s4_zlen/2.)
-      at_scratch = at_scratch*r/2.
-    elif s4p2_typ == "nl": 
-      getgrid2d(n,r,z,at_scratch,s4_nr,s4_nz,s4p2_str*s4_at_m,s4_r_m.min(),s4_r_m.max(), 
-                s4p2_zc-s4_zlen/2.,s4p2_zc+s4_zlen/2.)
-    else:
-      raise Exception("Vector Potential: S4.2 not defined")
-    at += at_scratch
-
-  if zzz >= s4p2_zc+PeriodLength-s4_zlen/2. and zzz <= s4p2_zc+PeriodLength+s4_zlen/2.:
-    # --- contribution from 2nd s4
-    if s4p2_typ == "lin": 
-      getgrid1d(n,z,at_scratch,s4_nz,s4p2_str*s4_bz0_m,s4p2_zc-s4_zlen/2.,s4p2_zc+s4_zlen/2.)
-      at_scratch = at_scratch*r/2.
-    elif s4p2_typ == "nl": 
-      getgrid2d(n,r,z,at_scratch,s4_nr,s4_nz,s4p2_str*s4_at_m,s4_r_m.min(),s4_r_m.max(), 
-                s4p2_zc-s4_zlen/2.,s4p2_zc+s4_zlen/2.)
-    else:
-      raise Exception("Vector Potential: S4.2 not defined")
-    at += at_scratch
   return at 
+
 
 ## Grated Acceleration Gap
 ##  Note: for ideal zero-length gap:  top.lacclzl=true for zero length gap.  Accel given given by acclez*(accelze-acclzs) 
