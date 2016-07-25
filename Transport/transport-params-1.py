@@ -12,7 +12,7 @@ NumberofPeriods = 5
 
 # Initial Radius
 
-InitialRadius = 0.008
+InitialRadius = 0.008*sqrt(2.)
 
 # set linear or nonlinear fields
 
@@ -28,7 +28,7 @@ CorrectionMode = 1
 
 # Number of particles per grid (default = 400, adjust for quick checks)
 
-ParticleNumber = 400
+GridNumber = 400
 
 # Envelope Plot Limits:
 plotxmin = "e"
@@ -38,8 +38,8 @@ plotymax = "e"
 
 # Center of 1st Solenoid
 
-s4p2_zc  = 0.3
+s4p2_zc  = PeriodLength / 2.
 
 # Number of steps per period
 
-nstep_period = 100
+nstep_period = 200

@@ -209,7 +209,7 @@ state_vector_2 = zeros(3*top.ns)
 
 deltaz = stepsize/2.
 
-last_step_number = int((env_ze-env_zs)/ds_diag) + 1 # employed in out-of-range interpolation
+last_step_number = int((env_ze-env_zs)/hl_dz) # employed in out-of-range interpolation
 
 zlist = []
 		

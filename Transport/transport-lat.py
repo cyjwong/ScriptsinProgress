@@ -147,7 +147,11 @@ def getatheta(r):
   n = len(r) 
   at = zeros(n)
   at_scratch = zeros(n) 
-  z  = top.zbeam*ones(n)
+  
+  zzz = top.zbeam % PeriodLength
+  
+  z  = zzz*ones(n)
+  
   #if   top.zbeam >= ecr_zmmin and top.zbeam <= ecr_zmmax:
     ## --- contribution in venus 
     #if ecr_typ == "lin":
@@ -169,7 +173,7 @@ def getatheta(r):
     #else:
       #raise Exception("Vector Potential: S4.1 not defined")
     #at += at_scratch
-  if top.zbeam >= s4p2_zc-s4_zlen/2. and top.zbeam <= s4p2_zc+s4_zlen/2.:
+  if zzz >= s4p2_zc-s4_zlen/2. and zzz <= s4p2_zc+s4_zlen/2.:
     # --- contribution from 2nd s4
     if s4p2_typ == "lin": 
       getgrid1d(n,z,at_scratch,s4_nz,s4p2_str*s4_bz0_m,s4p2_zc-s4_zlen/2.,s4p2_zc+s4_zlen/2.)
