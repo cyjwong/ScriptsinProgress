@@ -152,7 +152,7 @@ for i in range(stepnum):
 
 plg(combinedenvelop,sss, color="black", type="dash")
 
-limits(plotxmin,plotxmax, plotymin, max(combinedenvelop)*1.1)
+limits(plotxmin,plotxmax, 0., max(combinedenvelop)*1.1)
 
 fma()	
 
@@ -529,7 +529,7 @@ if integratewarp == 1:
 	
 	plg(combinedenvelop,sss, color="black", type="dash")	
 	
-	limits(plotxmin,plotxmax, plotymin, max(combinedenvelop)*1.1)
+	limits(plotxmin,plotxmax, 0., max(combinedenvelop)*1.1)
 	
 	fma()
 	
@@ -584,7 +584,7 @@ if integratewarp == 1:
 	
 	plg(combinedenvelop,sss, color="black")	
 	
-	limits(plotxmin,plotxmax, plotymin, max(combinedenvelop)*1.1)
+	limits(plotxmin,plotxmax, 0., max(combinedenvelop)*1.1)
 	
 	fma()
 
