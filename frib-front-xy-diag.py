@@ -130,7 +130,7 @@ diag_part_z_name = [
   "D5 Dipole #2: 3/4 of dipole length",
   "D5 Dipole #2: z-end",
   "Final position" 
-                   ]      
+                   ]
 
 diag_part_step = nint((diag_part_z-z_launch)/wxy.ds)
 
