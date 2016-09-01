@@ -19,6 +19,9 @@ ekin_per_u = 12.*keV                             # target kinetic energy/u for L
 StandBias  = A_ref*ekin_per_u/Q_ref - SourceBias # Conistent Bias of Injector Column
 Bias       = StandBias + SourceBias              # Total bias to achieve ekin_per_u 
 
+ref_gamma_post_gap = 1. + ekin_per_u/amu*clight**2
+ref_vel_post_gap = clight*sqrt(1. - 1./ref_gamma_post_gap**2)
+ref_brho_post_gap = ref_gamma_post_gap*ref_vel_post_gap*A_ref*amu/(Q_ref*jperev)
 
 # Venus ECR Source Fields 
 # Comment: Must have same z-grids for linear and nonlinear forms. 
@@ -351,6 +354,8 @@ if d5p1_typ == "ideal":
   bending_R = (d5p1_ze - d5p1_zs)/(pi/2.)
   bending_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/bending_R
   d5p1 = addnewdipo(zs = d5p1_zs, ze = d5p1_ze, by = bending_B)
+  equivalent_G = 0.9/bending_R**2 * ref_brho_post_gap	#focusing effect from slanted poles
+  d5p1_equiv_quad = addnewquad(zs = d5p1_zs, ze = d5p1_ze, db = -equivalent_G)
 # --- linear optic approximation field 
 elif d5p1_typ == "lin":
   print("Warning: No D5 1st Dipole Linear Applied Fields Defined")
@@ -379,6 +384,8 @@ if d5p2_typ == "ideal":
   bending_R = (d5p2_ze - d5p2_zs)/(pi/2.)
   bending_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/bending_R
   d5p2 = addnewdipo(zs = d5p2_zs, ze = d5p2_ze, by = bending_B)
+  equivalent_G = 0.9/bending_R**2 * ref_brho_post_gap	#focusing effect from slanted poles
+  d5p2_equiv_quad = addnewquad(zs = d5p2_zs, ze = d5p2_ze, db = -equivalent_G)
 # --- linear optic approximation field 
 elif d5p2_typ == "lin":
   print("Warning: No D5 2nd Dipole Linear Applied Fields Defined")
