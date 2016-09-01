@@ -83,6 +83,16 @@ diag_part_z = array([
   q7t1p2_zc,
   q7t1_mid_23 + 2*mm,
   q7t1p3_zc,
+  q7t2p1_zc,
+  (q7t2p1_zc + q7t2p2_zc)/2,
+  q7t2p2_zc,
+  (q7t2p2_zc + q7t2p3_zc)/2,
+  q7t2p3_zc,
+  d5p2_zs,
+  (d5p2_zs+d5p2_zc)/2,
+  d5p2_zc,
+  (d5p2_zc+d5p2_ze)/2,
+  d5p2_ze,
   z_adv]) 
 
 diag_part_z_name = [ 
@@ -109,6 +119,16 @@ diag_part_z_name = [
   "1st Q7 ESQ Triplet #2: z-Center",
   "after slits between Q7 #2 and #3",
   "1st Q7 ESQ Triplet #3: z-Center",
+  "2nd Q7 ESQ Triplet #1: z-Center",
+  "2nd Q7 ESQ Triplet between #1 and #2",
+  "2nd Q7 ESQ Triplet #2: z-Center",
+  "2nd Q7 ESQ Triplet between #2 and #3",
+  "2nd Q7 ESQ Triplet #3: z-Center",
+  "D5 Dipole #2: z-start",
+  "D5 Dipole #2: 1/4 of dipole length",
+  "D5 Dipole #2: z-Center",
+  "D5 Dipole #2: 3/4 of dipole length",
+  "D5 Dipole #2: z-end",
   "Final position" 
                    ]      
 

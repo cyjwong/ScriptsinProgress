@@ -265,10 +265,12 @@ else:
 d5p1_zc  = 69.587759   # D5 1: z-center  
 d5p1_str = 1.0         # D5 1: Input field scale factor
 d5p1_typ = "nl"        # D5 1: type: "ideal" = uniform By, "lin" = linear optics fields, "3d" = 3d field  
+d5p1_ideal_len = 1.0
 
 d5p2_zc  = 73.248371   # D5 2: z-center  
 d5p2_str = 1.0         # D5 2: Input field scale factor
 d5p2_typ = "nl"        # D5 2: type: "ideal" = uniform By, "lin" = linear optics fields, "3d" = 3d field
+d5p2_ideal_len = 1.0
 
 # --- nonlinear element data 
 if False: # OLD VERSION
@@ -340,21 +342,15 @@ if d5p1_typ == "nl":
 # Define starting and ending position of 1st ideal D5 dipole using ideal length and centre position
 # Makes the bend less tight than when the starting position is set to be 69.2 m
 
-d5p1_ideal_len = 1.0
-d5p1_zs_ideal = d5p1_zc - d5p1_ideal_len / 2.
-d5p1_ze_ideal = d5p1_zc + d5p1_ideal_len / 2.
-
-d5p2_ideal_len = 1.0
-d5p2_zs_ideal = d5p2_zc - d5p2_ideal_len / 2.
-d5p2_ze_ideal = d5p2_zc + d5p2_ideal_len / 2.
-
 # --- define dipole d5 
 
 # --- ideal (uniform) field 
-if d5p1_typ == "ideal": 
-  bending_R = (d5p1_ze_ideal - d5p1_zs_ideal)/(pi/2.)
+if d5p1_typ == "ideal":
+  d5p1_zs = d5p1_zc - d5p1_ideal_len / 2.
+  d5p1_ze = d5p1_zc + d5p1_ideal_len / 2.
+  bending_R = (d5p1_ze - d5p1_zs)/(pi/2.)
   bending_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/bending_R
-  d5p1 = addnewdipo(zs = d5p1_zs_ideal, ze = d5p1_ze_ideal, by = bending_B)
+  d5p1 = addnewdipo(zs = d5p1_zs, ze = d5p1_ze, by = bending_B)
 # --- linear optic approximation field 
 elif d5p1_typ == "lin":
   print("Warning: No D5 1st Dipole Linear Applied Fields Defined")
@@ -378,9 +374,11 @@ else:
 
 # --- ideal (uniform) field 
 if d5p2_typ == "ideal": 
-  bending_R = (d5p2_ze_ideal - d5p2_zs_ideal)/(pi/2.)
+  d5p2_zs = d5p2_zc - d5p2_ideal_len / 2.
+  d5p2_ze = d5p2_zc + d5p2_ideal_len / 2.
+  bending_R = (d5p2_ze - d5p2_zs)/(pi/2.)
   bending_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/bending_R
-  d5p2 = addnewdipo(zs = d5p2_zs_ideal, ze = d5p2_ze_ideal, by = bending_B)
+  d5p2 = addnewdipo(zs = d5p2_zs, ze = d5p2_ze, by = bending_B)
 # --- linear optic approximation field 
 elif d5p2_typ == "lin":
   print("Warning: No D5 2nd Dipole Linear Applied Fields Defined")
@@ -412,25 +410,13 @@ d5p1_bend = True  # True or False: Add ideal bend to lattice
 d5p2_bend = True  # True or False: Add ideal bend to lattice 
 
 
-if d5p1_bend and d5p1_typ == "ideal":
-  top.diposet = False     # turn off By that automatically generated with addnewbend()
-  equivalent_ideal_R = (d5p1_ze_ideal - d5p1_zs_ideal)/(pi/2.)
-  equivalent_ideal_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/equivalent_ideal_R
-  addnewbend(zs = d5p1_zs_ideal, ze = d5p1_ze_ideal, rc = equivalent_ideal_R)
-
-if d5p1_bend and d5p1_typ == "nl":
+if d5p1_bend:
   top.diposet = False     # turn off By that automatically generated with addnewbend()
   equivalent_ideal_R = (d5p1_ze - d5p1_zs)/(pi/2.)
   equivalent_ideal_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/equivalent_ideal_R
   addnewbend(zs = d5p1_zs, ze = d5p1_ze, rc = equivalent_ideal_R)
 
-if d5p2_bend and d5p2_typ == "ideal":
-  top.diposet = False     # turn off By that automatically generated with addnewbend()
-  equivalent_ideal_R = (d5p2_ze_ideal - d5p2_zs_ideal)/(pi/2.)
-  equivalent_ideal_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/equivalent_ideal_R
-  addnewbend(zs = d5p2_zs_ideal, ze = d5p2_ze_ideal, rc = equivalent_ideal_R)
-
-if d5p2_bend and d5p2_typ == "nl":
+if d5p2_bend:
   top.diposet = False     # turn off By that automatically generated with addnewbend()
   equivalent_ideal_R = (d5p2_ze - d5p2_zs)/(pi/2.)
   equivalent_ideal_B = sqrt( A_ref*ekin_per_u*jperev*2.*A_ref*amu)/(Q_ref*jperev)/equivalent_ideal_R
