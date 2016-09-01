@@ -598,7 +598,32 @@ else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p3 = None
 
+# --- define esq q7 2nd triplet part 1 
+if q7t2p1_typ == "lin":
+  q7t2p1 = addnewmmlt(zs=q7t2p1_zc-q7_zlen/2.,ze=q7t2p1_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t2p1_str*q7t2p1_sign) 
+elif q7t2p1_typ == "nl":
+  q7t2p1 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t2p1_zc-q7_zlen/2.,ze=q7t2p1_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t2p1_str*q7t2p1_sign) 
+else:
+  print("Warning: No S4 1st Solenoid Applied Fields Defined") 
+  q7t2p1 = None
 
+# --- define esq q7 2nd triplet part 2
+if q7t2p2_typ == "lin":
+  q7t2p2 = addnewmmlt(zs=q7t2p2_zc-q7_zlen/2.,ze=q7t2p2_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t2p2_str*q7t2p2_sign) 
+elif q7t2p2_typ == "nl":
+  q7t2p2 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t2p2_zc-q7_zlen/2.,ze=q7t2p2_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t2p2_str*q7t2p2_sign) 
+else:
+  print("Warning: No S4 1st Solenoid Applied Fields Defined") 
+  q7t2p2 = None
+
+# --- define esq q7 2nd triplet part 3
+if q7t2p3_typ == "lin":
+  q7t2p3 = addnewmmlt(zs=q7t2p3_zc-q7_zlen/2.,ze=q7t2p3_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t2p3_str*q7t2p3_sign) 
+elif q7t2p3_typ == "nl":
+  q7t2p3 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t2p3_zc-q7_zlen/2.,ze=q7t2p3_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t2p3_str*q7t2p3_sign) 
+else:
+  print("Warning: No S4 1st Solenoid Applied Fields Defined") 
+  q7t2p3 = None
 
 
 ### Scrapers ###
@@ -624,7 +649,7 @@ q7t1_pipe_ze = q7t1_pipe_zs + 952*mm
 r_ap   = array([r_p_up,               gag_rp,       r_p_down,   post_d5p1_pipe_r,     12.4*cm,       7.5*cm  ])
 v_ap   = array([SourceBias+StandBias, StandBias/2., 0.,         0.,                   0.,            0.]) 
 z_ap_l = array([ecr_z_extr,           gag_col_zs,   gag_col_ze, post_d5p1_pipe_zs,    q7t1_pipe_zs,  q7t1_pipe_ze])
-z_ap_u = array([gag_col_zs,           gag_col_ze,   d5p1_zs,    post_d5p1_pipe_ze,    q7t1_pipe_ze,  q7t1_pipe_ze + 300*mm])
+z_ap_u = array([gag_col_zs,           gag_col_ze,   d5p1_zs,    post_d5p1_pipe_ze,    q7t1_pipe_ze,  d5p2_ze + 0.4])
 
 beampipe = [] 
 for i in range(len(r_ap)):
