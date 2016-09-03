@@ -120,7 +120,7 @@ diag_part_z_name = [
   "1st Q7 ESQ Triplet #2: z-Center",
   "after slits between Q7 #2 and #3",
   "1st Q7 ESQ Triplet #3: z-Center",
-  "Four-jaw collimator"
+  "Four-jaw collimator",
   "2nd Q7 ESQ Triplet #1: z-Center",
   "2nd Q7 ESQ Triplet between #1 and #2",
   "2nd Q7 ESQ Triplet #2: z-Center",
