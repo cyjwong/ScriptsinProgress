@@ -19,7 +19,7 @@ ekin_per_u = 12.*keV                             # target kinetic energy/u for L
 StandBias  = A_ref*ekin_per_u/Q_ref - SourceBias # Conistent Bias of Injector Column
 Bias       = StandBias + SourceBias              # Total bias to achieve ekin_per_u 
 
-ref_gamma_post_gap = 1. + ekin_per_u/amu*clight**2
+ref_gamma_post_gap = 1. + ekin_per_u/(amu*clight**2)
 ref_vel_post_gap = clight*sqrt(1. - 1./ref_gamma_post_gap**2)
 ref_brho_post_gap = ref_gamma_post_gap*ref_vel_post_gap*A_ref*amu/(Q_ref*jperev)
 
