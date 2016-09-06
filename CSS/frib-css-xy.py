@@ -128,7 +128,7 @@ for s in sp.keys():
   #else:
     #raise Exception("Error: init_emit_spec not set properly") 
   #
-  vthz_i = sqrt(2.*jperev*temp_z_launch[s]/sp[s].sm)   
+  vthz_i = sqrt(2.*jperev*temp_z_birth[s]/sp[s].sm)   
   # --- Energy and Current 
   sp[s].ekin   = ekin_launch[s]             # kinetic energy of beam particle [eV]
   sp[s].vbeam  = 0.                  # beam axial velocity [m/sec] (set from ekin if 0) 
@@ -253,7 +253,7 @@ if single_particle: top.depos = "none"
 package("wxy"); generate()
 
 # Make diagnostics for applied lattice fields 
-execfile("frib-css-lat-diag.py") 
+#execfile("frib-css-lat-diag.py") 
 
 # Install conducting aperture on mesh for fieldsolves 
 #for i in aperture:
@@ -373,14 +373,8 @@ diag_calls()
 
 #raise Exception("to here")
 n_step = nint((z_adv-z_launch)/wxy.ds) + 1   # add one step in case of roundoff 
-step_rigidities_plot = nint(((d5p1_zc + s4p2_zc)/2-z_launch)/wxy.ds)
 
-step(step_rigidities_plot)
-
-# Make plot of final Brho by species 
-plt_diag_bro(label = "Final Rigidity by Species") # now takes place between 2nd S4 Solenoid and 1st D5 Dipole
-
-step(n_step-step_rigidities_plot)
+step(n_step)
 
 
 # Make additional history plots for final run if not already called 

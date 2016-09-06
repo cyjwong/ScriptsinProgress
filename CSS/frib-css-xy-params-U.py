@@ -125,7 +125,7 @@ elif ref_mode in sp.keys():
   A_ref = sp[ref_mode].mass/amu  
   Q_ref = sp[ref_mode].charge/echarge 
 # --- reference A_ref and Q_ref input 
-elif ref_mode == 3:
+elif ref_mode == 1:
   pass  
 # --- error trap 
 else:
@@ -449,7 +449,7 @@ for s in sp.keys():
     raise Exception("Error: init_emit_spec not set properly") 
 
 
-phase_space_vol_birth = {key: ptheta_birth[key] + thermal_emit[key] for key in sp.keys()}
+phase_space_vol_birth = {key: sqrt(ptheta_birth[key]**2 + emit_thermal_birth[key]**2) for key in sp.keys()}
 
 ptheta_launch = {}
 emit_thermal_launch = {}
@@ -498,9 +498,9 @@ rxp = {}
 ryp = {}
 
 for ii in sp.keys():
-	gamma = 1. + ekin_launch*jperev/(sp[ii].mass*clight**2)
+	gamma = 1. + ekin_launch[ii]*jperev/(sp[ii].mass*clight**2)
 	v_z = clight*sqrt(1. - 1./gamma**2)
-	emit_edge = phase_space_vol_birth/(gamma*v_z/clight)
+	emit_edge = phase_space_vol_birth[ii]/(gamma*v_z/clight)
 	rx[ii] = sqrt(emit_edge*beta_x_launch)
 	ry[ii] = sqrt(emit_edge*beta_x_launch)
 	rxp[ii] = -sqrt(emit_edge/beta_x_launch)*alpha_x_launch

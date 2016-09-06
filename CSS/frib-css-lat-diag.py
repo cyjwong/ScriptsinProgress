@@ -132,39 +132,39 @@ if dl_sym_check:
   ptitles("Ey Electric Field at x=0, y = +-%s mm B/R"%(dl_r/mm),"z [m]","Ey [V/m]",)
   fma()
 
-# On axis Bz element by element 
-#  * Plots appropriate for linear or nonlinear elements 
-#  * Scale should range on the coordinates defined to better visualize field structure 
+## On axis Bz element by element 
+##  * Plots appropriate for linear or nonlinear elements 
+##  * Scale should range on the coordinates defined to better visualize field structure 
 
-def diag_field_ele_Bz(type):
-  dict_id  = {'s4p1':s4p1[0],  's4p2':s4p2[0], 'ecr':ecr[0]}
-  dict_typ = {'s4p1':s4p1_typ, 's4p2':s4p2_typ,'ecr':ecr_typ}
-  id  = dict_id[type]
-  typ = dict_typ[type]
-  if typ == "lin":
-    plotmmlt(im=id,titles=false)
-  elif typ == "nl":
-    plotbgrd(ib=id,component='z',ix=0,iy=0,titles=false)
-  else:
-    return
+#def diag_field_ele_Bz(type):
+  #dict_id  = {'s4p1':s4p1[0],  's4p2':s4p2[0], 'ecr':ecr[0]}
+  #dict_typ = {'s4p1':s4p1_typ, 's4p2':s4p2_typ,'ecr':ecr_typ}
+  #id  = dict_id[type]
+  #typ = dict_typ[type]
+  #if typ == "lin":
+    #plotmmlt(im=id,titles=false)
+  #elif typ == "nl":
+    #plotbgrd(ib=id,component='z',ix=0,iy=0,titles=false)
+  #else:
+    #return
 
-diag_field_ele_Bz('ecr')
-ptitles("On Axis Bz of ECR","z [m]","Bz [Tesla]",)
-fma() 
+#diag_field_ele_Bz('ecr')
+#ptitles("On Axis Bz of ECR","z [m]","Bz [Tesla]",)
+#fma() 
 
-diag_field_ele_Bz('s4p1')
-ptitles("On Axis Bz of 1st S4","z [m]","Bz [Tesla]",)
-fma() 
+#diag_field_ele_Bz('s4p1')
+#ptitles("On Axis Bz of 1st S4","z [m]","Bz [Tesla]",)
+#fma() 
 
-diag_field_ele_Bz('s4p2')
-ptitles("On Axis Bz of 2nd S4","z [m]","Bz [Tesla]",)
-fma()
+#diag_field_ele_Bz('s4p2')
+#ptitles("On Axis Bz of 2nd S4","z [m]","Bz [Tesla]",)
+#fma()
 
-diag_field_ele_Bz('ecr')
-diag_field_ele_Bz('s4p1')
-diag_field_ele_Bz('s4p2')
-ptitles("On Axis Bz of Elements","z [m]","Bz [Tesla]",)
-fma() 
+#diag_field_ele_Bz('ecr')
+#diag_field_ele_Bz('s4p1')
+#diag_field_ele_Bz('s4p2')
+#ptitles("On Axis Bz of Elements","z [m]","Bz [Tesla]",)
+#fma() 
 
 
 # Plot of Bz and Ez on Axis on a similar scale to help understand field structure

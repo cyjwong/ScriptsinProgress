@@ -113,7 +113,7 @@ def field_two_peak(ecr_zmin):
 		
 	return [cumulativefield / stepcounter, stepcounter*step_size , peak1, peak2, trough]
 
-bfieldinfo = field_two_peak(ecr_zmmin)
+
 
 
 # Beam loading for the 3rd birth mode
@@ -122,7 +122,7 @@ bfieldinfo = field_two_peak(ecr_zmmin)
 # Distribute the remainder evenly between the two peaks
 
 if birth_mode == 3:
-
+	bfieldinfo = field_two_peak(ecr_zmmin)
 	peak1 = bfieldinfo[2]
 	peak2 = bfieldinfo[3]
 	

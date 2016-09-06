@@ -124,17 +124,12 @@ diag_part_z_names = {diag_part_step[i]:diag_part_z_name[i] for i in range(len(di
 
 diag_field_z = array([
   z_launch,
-  s4p1_zc,gag_zc,
-  s4p2_zc,
   d5p1_zc,
   z_adv 
                     ]) 
 
 diag_field_z_name = [ 
   "Initial Launch", 
-  "S4 Solenoid #1: z-Center", 
-  "Grated Gap: z-Center",
-  "S4 Solenoid #1: z-Center",
   "D5 Dipole #1: z-Center", 
   "Final position"
                      ]
@@ -247,13 +242,13 @@ hl_ibeam_et = fzeros([hl_lenhist_max])         # total beam current (electrical)
 hl_lambda_p = fzeros([hl_lenhist_max,top.ns])  # line charge (particle) 
 hl_lambda_e = fzeros([hl_lenhist_max,top.ns])  # line charge (electrical) 
 #
-hl_ptheta   = fzeros([hl_lenhist_max,top.ns])  # canonical angular momentum <P_theta>_j (nonlinear appl field version)   
-hl_pth      = fzeros([hl_lenhist_max,top.ns])  # <P_theta>_j in emittance units <P_theta>_j/(gamma_j*beta_j*m_j*c)  
-hl_pthn     = fzeros([hl_lenhist_max,top.ns])  # <P_theta>_j in norm emittance units <P_theta>_j/(m_j*c)
+#hl_ptheta   = fzeros([hl_lenhist_max,top.ns])  # canonical angular momentum <P_theta>_j (nonlinear appl field version)   
+#hl_pth      = fzeros([hl_lenhist_max,top.ns])  # <P_theta>_j in emittance units <P_theta>_j/(gamma_j*beta_j*m_j*c)  
+#hl_pthn     = fzeros([hl_lenhist_max,top.ns])  # <P_theta>_j in norm emittance units <P_theta>_j/(m_j*c)
 #
-hl_ptheta_l = fzeros([hl_lenhist_max,top.ns])  # Same canonical angular momentum measures with
-hl_pth_l    = fzeros([hl_lenhist_max,top.ns])  #   linear applied magnetic field approximation.  
-hl_pthn_l   = fzeros([hl_lenhist_max,top.ns])  #   (redundant with above for linear lattice) 
+#hl_ptheta_l = fzeros([hl_lenhist_max,top.ns])  # Same canonical angular momentum measures with
+#hl_pth_l    = fzeros([hl_lenhist_max,top.ns])  #   linear applied magnetic field approximation.  
+#hl_pthn_l   = fzeros([hl_lenhist_max,top.ns])  #   (redundant with above for linear lattice) 
 #
 hl_lz       = fzeros([hl_lenhist_max,top.ns])  # mechanical angular momentum
 hl_krot     = fzeros([hl_lenhist_max,top.ns])  # rotation wavenumber  
@@ -346,20 +341,20 @@ def diag_hist_hl():
     hl_lz[top.jhist,js] = avg_xyp - avg_yxp
     # --- Canonical angular momentum <P_theta>_js 
     #       Notes: * Uses A_theta via getatheata() consistently with linear/nonlinear elements.   
-    hl_ptheta[top.jhist,js] = avg_xpy - avg_ypx + sum( (s.sw*s.w)*s.charge*r*getatheta(r) )/weight
+    #hl_ptheta[top.jhist,js] = avg_xpy - avg_ypx + sum( (s.sw*s.w)*s.charge*r*getatheta(r) )/weight
     # --- Normalized canonical angular momentum in emittance units. <P_theta>_js/(m_js*c) 
     #       * <P_theta>_j/(m_j*c) in envelope model scales as a normalized emittance 
     #         and should not vary with acceleration with linear forces.    
     #       * This employs the nonlinear definition of P_theta if the lattice is nonlinear !    
-    hl_pthn[top.jhist,js] = hl_ptheta[top.jhist,js]/(s.mass*clight)
+    #hl_pthn[top.jhist,js] = hl_ptheta[top.jhist,js]/(s.mass*clight)
     # --- Canonical angular momentum of species in emittance units 
-    hl_pth[top.jhist,js] = hl_pthn[top.jhist,js]/(gammabeam*(vbeam/clight))
+    #hl_pth[top.jhist,js] = hl_pthn[top.jhist,js]/(gammabeam*(vbeam/clight))
     # --- Canonical angular momentum in linear applied field approx (all 3 versions above) 
     #       * These are redundant in linear field lattice 
     #       * Use _l for "linear" flag 
-    hl_ptheta_l[top.jhist,js] = avg_xpy - avg_ypx + sum( (s.sw*s.w)*(s.charge*bz0/2.)*avg_rsq )/weight
-    hl_pthn_l[top.jhist,js]   = hl_ptheta_l[top.jhist,js]/(s.mass*clight)
-    hl_pth_l[top.jhist,js]    = hl_pthn_l[top.jhist,js]/(gammabeam*(vbeam/clight))
+    #hl_ptheta_l[top.jhist,js] = avg_xpy - avg_ypx + sum( (s.sw*s.w)*(s.charge*bz0/2.)*avg_rsq )/weight
+    #hl_pthn_l[top.jhist,js]   = hl_ptheta_l[top.jhist,js]/(s.mass*clight)
+    #hl_pth_l[top.jhist,js]    = hl_pthn_l[top.jhist,js]/(gammabeam*(vbeam/clight))
     # --- rms x- and y-emittances: account for factor of 4 diff between Warp rms edge and rms measures 
     hl_epsx[top.jhist,js] = top.hepsx[0,top.jhist,js]/4.
     hl_epsy[top.jhist,js] = top.hepsy[0,top.jhist,js]/4.
@@ -374,9 +369,9 @@ def diag_hist_hl():
     hl_epsrn[top.jhist,js] = (gammabeam*(vbeam/clight))*hl_epsr[top.jhist,js]
     # --- rms total phase volume emittance including radial thermal and canonical angular momentum 
     #       contributions based on envelope model intrpretation of total phase-space area. 
-    hl_epspv[top.jhist,js] = sqrt( (hl_epsr[top.jhist,js])**2 + (hl_pth[top.jhist,js])**2 ) 
+    #hl_epspv[top.jhist,js] = sqrt( (hl_epsr[top.jhist,js])**2 + (hl_pth[top.jhist,js])**2 ) 
     # --- rms normalized total phase volume emittance
-    hl_epspvn[top.jhist,js] = sqrt( (hl_epsrn[top.jhist,js])**2 + (hl_pthn[top.jhist,js])**2 )  
+    #hl_epspvn[top.jhist,js] = sqrt( (hl_epsrn[top.jhist,js])**2 + (hl_pthn[top.jhist,js])**2 )  
     # --- ion temperature calculated from emittance [eV]
     hl_temp[top.jhist,js] = hl_ekin[top.jhist,js]*hl_epsr[top.jhist,js]**2/dvnz(hl_rrms[top.jhist,js]**2) 
     # --- Perveance, NR formula for species
@@ -1508,10 +1503,10 @@ def diag_calls():
     diag_field(plt_pc=true,plt_pc_xy=true,plt_pa=true)
   if top.it in diag_hist_step:
     diag_hist(plt_ekin=true,plt_spnum=true,plt_curr_e=true,plt_curr_p=true,plt_lam_p=true,plt_lam_e=true,
-              plt_lz=true,plt_pth=true,plt_pthn=true,plt_krot=true,plt_lang=true, 
+              plt_lz=true,plt_pth=false,plt_pthn=false,plt_krot=true,plt_lang=true, 
               plt_cen=true,plt_envrms=true,plt_envmax=true,plt_envrmsp=true,  
               plt_emit=true,plt_emitn=true,plt_emitg=true,plt_emitng=true,plt_emitr=true,plt_emitnr=true, 
-              plt_emitpv=true,plt_emitpvn=true,plt_temp=true,plt_Qperv=true,plt_neutf=true)
+              plt_emitpv=false,plt_emitpvn=false,plt_temp=true,plt_Qperv=true,plt_neutf=true)
 
 
 
