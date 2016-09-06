@@ -14,27 +14,27 @@ All code inputs are mks with the exception of particle kinetic energy (eV).
 To run this Warp script:
   Interactive (return to interpreter after executing):
 
-    % python -i frib-front-xy.py 
+    % python -i frib-css-xy.py 
 
   Non-interactive (exit interpreter after executing):
 
-    % python frib-front-xy.py
+    % python frib-css-xy.py
 
 This setup scripts for these simulations are large and have been broken 
 apart into functional sections to aid maintainability.
  ** To be implemented **   
 
-    frib-front-xy.py             :  Main setup/control for xy slice simulations 
-    frib-front-xy-parms-name.py  :  Parameters for runs, name = ion type, U etc
+    frib-css-xy.py             :  Main setup/control for xy slice simulations 
+    frib-css-xy-parms-name.py  :  Parameters for runs, name = ion type, U etc
 
-    frib-front-lat.py       :  Lattice setup/description (3D, xy etc) 
-    frib-front-lat-diag.py  :  Diagnostics for lattice     
+    frib-css-lat.py       :  Lattice setup/description (3D, xy etc) 
+    frib-css-lat-diag.py  :  Diagnostics for lattice     
 
-    frib-front-xy-load.py   :  Initial beam specification 
-    frib-front-xy-diag.py   :  Diagnostics 
+    frib-css-xy-load.py   :  Initial beam specification 
+    frib-css-xy-diag.py   :  Diagnostics 
 
-    frib-front-env.py       :  Axisymmetric Envelope solver
-    frib-front-env-diag.py  :  Diagnostics for envelope solver  
+    frib-css-env.py       :  Axisymmetric Envelope solver
+    frib-css-env-diag.py  :  Diagnostics for envelope solver  
 
 """
 
@@ -58,7 +58,7 @@ top.runmaker = "Wong and Lund"
 
 # Read in parameters describing beam to be simulated
 #   - Use appropriate name input file for type of beam to be simulated. 
-execfile("frib-front-xy-params-U.py") 
+execfile("frib-css-xy-params-U.py") 
 
 
 # --- Setup for variable particle weights in slice code. 
@@ -159,7 +159,7 @@ r_y = maxnd(ry.values())
 #
 #  Read in lattice description from auxillary script file 
 
-execfile("frib-front-lat.py") 
+execfile("frib-css-lat.py") 
 
 
 # Define transverse simulation grid
@@ -253,7 +253,7 @@ if single_particle: top.depos = "none"
 package("wxy"); generate()
 
 # Make diagnostics for applied lattice fields 
-execfile("frib-front-lat-diag.py") 
+execfile("frib-css-lat-diag.py") 
 
 # Install conducting aperture on mesh for fieldsolves 
 #for i in aperture:
@@ -298,7 +298,7 @@ def adjustments_before_rho():
 # Modify ion distribution at launch point based on different assumptions on their birth 
 #  in the ECR to reflect a target value of beam canonical angular momentum.  
 
-execfile("frib-front-xy-load.py")
+execfile("frib-css-xy-load.py")
 
 if birth_mode == 1 or birth_mode == 2:
 	diag_plt_krot_launch() 
@@ -316,7 +316,7 @@ zmmnt()
 savehist(0.) 
 
 # Read in diagnostics for slice run 
-execfile("frib-front-xy-diag.py") 
+execfile("frib-css-xy-diag.py") 
 
 # Call initial history diagnostics accumulation to save initial load value 
 #  if flagged for accumulation.   
@@ -402,7 +402,7 @@ step(n_step-step_rigidities_plot)
 
 # Output data to auxillary file
 output_data = false 
-output_data_file = "frib-front-xy_data.txt" 
+output_data_file = "frib-css-xy_data.txt" 
 
 if output_data:
   fout = open(output_data_file,"a")
@@ -430,11 +430,11 @@ printtimers()
 
 # Multi-Species Envelope Model 
 
-#execfile("frib-front-env.py")
+#execfile("frib-frib-env.py")
 
 # Diagnostics to compare envelope model to Warp xy simulation 
 
-#execfile("frib-front-env-diag.py")
+#execfile("frib-frib-env-diag.py")
 
 
 # Make sure that last plot is flushed from buffer
