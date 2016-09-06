@@ -114,28 +114,28 @@ for ii in sort(sp.keys()):
 #         Care must be taken to consitently set various factors in coefficients.  
 
 for s in sp.keys():
-  ekin_i  = ekin[s]
-  betab_i = sqrt(2.*jperev*ekin_i/sp[s].sm)/clight   # NR beta associated the KE 
+  #ekin_i  = ekin[s]
+  #betab_i = sqrt(2.*jperev*ekin_i/sp[s].sm)/clight   # NR beta associated the KE 
+  ##
+  #rb_i    = sqrt(rx[s]*ry[s])          # take mean measure in case inhomogeneous
+  ##
+  #emitn_i = sqrt(emitnx[s]*emitny[s])  # take mean measure in case inhomogeneous  
+  #temp_i  = temp_p[s]  
+  #if init_ps_spec == "emitn":
+    #emitn_edge_i = 4.*emitn_i 
+  #elif init_ps_spec == "temp": 
+    #emitn_edge_i = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
+  #else:
+    #raise Exception("Error: init_emit_spec not set properly") 
   #
-  rb_i    = sqrt(rx[s]*ry[s])          # take mean measure in case inhomogeneous
-  #
-  emitn_i = sqrt(emitnx[s]*emitny[s])  # take mean measure in case inhomogeneous  
-  temp_i  = temp_p[s]  
-  if init_ps_spec == "emitn":
-    emitn_edge_i = 4.*emitn_i 
-  elif init_ps_spec == "temp": 
-    emitn_edge_i = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
-  else:
-    raise Exception("Error: init_emit_spec not set properly") 
-  #
-  vthz_i = sqrt(2.*jperev*temp_z[s]/sp[s].sm)   
+  vthz_i = sqrt(2.*jperev*temp_z_launch[s]/sp[s].sm)   
   # --- Energy and Current 
-  sp[s].ekin   = ekin[s]             # kinetic energy of beam particle [eV]
+  sp[s].ekin   = ekin_launch[s]             # kinetic energy of beam particle [eV]
   sp[s].vbeam  = 0.                  # beam axial velocity [m/sec] (set from ekin if 0) 
   sp[s].ibeam  = ibeam[s]            # beam current [amps] 
   # --- Perp PS areas and Par temp 
-  sp[s].emitnx = emitn_edge_i        # beam x-emittance, rms edge [m-rad] 
-  sp[s].emitny = emitn_edge_i        # beam y-emittance, rms edge [m-rad]
+  sp[s].emitnx = emit_thermal_launch[s]        # beam x-emittance, rms edge [m-rad] 
+  sp[s].emitny = emit_thermal_launch[s]        # beam y-emittance, rms edge [m-rad]
   sp[s].vthz   = vthz_i              # axial velocity spread [m/sec] 
   # --- centroid 
   sp[s].x0  = xc[s]  #   x0:   initial x-centroid xc = <x> [m]

@@ -204,10 +204,14 @@ ibeam = {
 #      * Set in a species named dictionary ekin  
 #      * Set as Q*SourceBias where Q is the species charge state  
 
+SourceBias = 35.*keV  # source voltage: set for Q_ref*SourceBias/A =>  4.9264706 keV/u for U 
+
+ekin_birth = {key: SourceBias*charge_states[key] for key in sp.keys()} 
+
 
 ekin_per_u = 12.*keV                             # target kinetic energy/u for LEBT post ES gap  
 
-ekin = {key: ekin_per_u*A_ref/Q_ref*charge_states[key] for key in sp.keys()} 
+ekin_launch = {key: ekin_per_u*A_ref/Q_ref*charge_states[key] for key in sp.keys()} 
 
 
 
@@ -216,6 +220,9 @@ ekin = {key: ekin_per_u*A_ref/Q_ref*charge_states[key] for key in sp.keys()}
 # 2) Set up initial P_theta and thermal emit as if the beam is launched at source
 # 3) Redefine P_theta or thermal emit in accordance with launch mode
 # 4) Inject rotation using frib-css-xy-load.py if P_theta does not vanish
+
+# suffix "birth" denotes value at source extraction
+# suffix "launch" or no suffice denotes value at launch in front of CSS
 
 # Phase space volume contribution:
 
@@ -384,11 +391,11 @@ temp_perp_ion  = 3.          # initial transverse ion temp [eV]
 temp_z_ion     = 3.          # initial z          ion temp [eV] 
 emitn          = 0.4*mm*mr   # initial rms normalized emittance [m-rad]  ** NOT edge measure **
 
-temp_p = {key: temp_perp_ion for key in sp.keys()} 
-temp_z = {key: temp_z_ion    for key in sp.keys()} 
+temp_p_birth = {key: temp_perp_ion for key in sp.keys()} 
+temp_z_birth = {key: temp_z_ion    for key in sp.keys()} 
 
-emitnx = {key: emitn for key in sp.keys()}
-emitny = {key: emitn for key in sp.keys()}
+emitnx_birth = {key: emitn for key in sp.keys()}
+emitny_birth = {key: emitn for key in sp.keys()}
 
 
 
@@ -415,47 +422,47 @@ ycp = {key: 0. for key in sp.keys()}
 r_extractor = 4.*mm   # ECR extraction aperture radius [m]
                       #   Value both for Venus and Artemis A,B ECR Sources 
 
-rx  = {key: r_extractor for key in sp.keys()}
-ry  = {key: r_extractor for key in sp.keys()}
+rx_birth  = {key: r_extractor for key in sp.keys()}
+ry_birth  = {key: r_extractor for key in sp.keys()}
 
-rxp = {key: 0. for key in sp.keys()}
-ryp = {key: 0. for key in sp.keys()}
-
-
+rxp_birth = {key: 0. for key in sp.keys()}
+ryp_birth = {key: 0. for key in sp.keys()}
 
 
-thermal_emit_birth = {}
+
+
+emit_thermal_birth = {}
 
 for s in sp.keys():
-  ekin_i  = ekin[s]
+  ekin_i  = ekin_birth[s]
   betab_i = sqrt(2.*jperev*ekin_i/sp[s].sm)/clight   # NR beta associated the KE 
   #
-  rb_i    = sqrt(rx[s]*ry[s])          # take mean measure in case inhomogeneous
+  rb_i    = sqrt(rx_birth[s]*ry_birth[s])          # take mean measure in case inhomogeneous
   #
-  emitn_i = sqrt(emitnx[s]*emitny[s])  # take mean measure in case inhomogeneous  
-  temp_i  = temp_p[s]  
+  emitn_i = sqrt(emitnx_birth[s]*emitny_birth[s])  # take mean measure in case inhomogeneous  
+  temp_i  = temp_p_birth[s]  
   if init_ps_spec == "emitn":
-    thermal_emit_birth[s] = 4.*emitn_i 
+    emit_thermal_birth[s] = 4.*emitn_i 
   elif init_ps_spec == "temp": 
-    thermal_emit_birth[s] = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
+    emit_thermal_birth[s] = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
   else:
     raise Exception("Error: init_emit_spec not set properly") 
 
 
-phase_space_vol = {}
-
-for ii in sp.keys():
-	phase_space_vol[ii] = ptheta_birth[ii] + thermal_emit[ii]
+phase_space_vol_birth = {key: ptheta_birth[key] + thermal_emit[key] for key in sp.keys()}
 
 ptheta_launch = {}
 emit_thermal_launch = {}
 
 for ii in sp.keys():
+	if phase_space_vol_mode == 0:
+		ptheta_launch[ii] = ptheta_birth[ii]
+		emit_thermal_launch[ii] = emit_thermal_birth[ii]
 	if phase_space_vol_mode == 1:
 		ptheta_launch[ii] = 0.
-		emit_thermal_launch[ii] = phase_space_vol[ii]
+		emit_thermal_launch[ii] = phase_space_vol_birth[ii]
 	if phase_space_vol_mode == 2:
-		ptheta_launch[ii] = phase_space_vol[ii]
+		ptheta_launch[ii] = phase_space_vol_birth[ii]
 		emit_thermal_launch[ii] = 0.
 
 
@@ -467,30 +474,48 @@ for ii in sp.keys():
 
 
 
-# --- Species initial beam size: elliptical cross-section beam 
-#      * Set as species-named dictionaries with:
-#   
-#   rx  = 2*sqrt(<x^2>)           Initial x-plane beam rms edge radius [m] 
-#   rxp = 2*<x*x'>/sqrt(<x^2>)    Initial rms envelope angle   [rad] 
-# 
-#   ry, ryp  are analogous y-plane measures 
-#
-# Notes:
-# * Now set rx etc by fraction of ECR aperture size.  
-# * Previous simulations used betatron functions with a specific emittance value to get 
-#   desired beam size. Code used was (y-plane similar):   
-#     alpha_x = 0.
-#     beta_x  = 12.9*cm
-#     gamma_x = (1. + alpha_x**2)/beta_x 
-#
-#     emitn_edge = 0.4*mm*mr   # norm rms edge emittance used to set beam size 
-#
-#     v_z_ref   = sqrt(2.*jperev*Q_ref*SourceBias/m_ref)  # nonrel approx ref z-velocity 
-#     gamma_ref = 1./sqrt(1.-(v_z_ref/clight)**2)         # ref axial gamma factor (approx 1) 
-#     emit_edge = emitn_edge/(gamma_ref*v_z_ref/clight)   # unnormalized rms edge emittance 
-#
-#     rx  = sqrt(emit_edge*beta_x)             # envelope x-edge 
-#     rxp = -sqrt(emit_edge/beta_x)*alpha_x    # envelope x-angle 
+ #--- Species initial beam size: elliptical cross-section beam 
+      #* Set as species-named dictionaries with:
+   
+   #rx  = 2*sqrt(<x^2>)           Initial x-plane beam rms edge radius [m] 
+   #rxp = 2*<x*x'>/sqrt(<x^2>)    Initial rms envelope angle   [rad] 
+ 
+   #ry, ryp  are analogous y-plane measures 
+
+ #Notes:
+ #* Now set rx etc by fraction of ECR aperture size.  
+ #* Previous simulations used betatron functions with a specific emittance value to get 
+   #desired beam size. Code used was (y-plane similar):   
+alpha_x_launch = -0.4948820499
+beta_x_launch  = 4.321149742
+gamma_x_launch = (1. + alpha_x_launch**2)/beta_x_launch
+
+#emitn_edge = 0.4*mm*mr   # norm rms edge emittance used to set beam size 
+
+rx = {}
+ry = {}
+rxp = {}
+ryp = {}
+
+for ii in sp.keys():
+	gamma = 1. + ekin_launch*jperev/(sp[ii].mass*clight**2)
+	v_z = clight*sqrt(1. - 1./gamma**2)
+	emit_edge = phase_space_vol_birth/(gamma*v_z/clight)
+	rx[ii] = sqrt(emit_edge*beta_x_launch)
+	ry[ii] = sqrt(emit_edge*beta_x_launch)
+	rxp[ii] = -sqrt(emit_edge/beta_x_launch)*alpha_x_launch
+	ryp[ii] = -sqrt(emit_edge/beta_x_launch)*alpha_x_launch
+
+#ref_gamma_post_gap = 1. + ekin_per_u*jperev/(amu*clight**2)
+#ref_vel_post_gap = clight*sqrt(1. - 1./ref_gamma_post_gap**2)
+#ref_brho_post_gap = ref_gamma_post_gap*ref_vel_post_gap*A_ref*amu/(Q_ref*jperev)
+
+#v_z_ref   = sqrt(2.*jperev*Q_ref*SourceBias/m_ref)  # nonrel approx ref z-velocity 
+#gamma_ref = 1./sqrt(1.-(v_z_ref/clight)**2)         # ref axial gamma factor (approx 1) 
+#emit_edge = emitn_edge/(gamma_ref*v_z_ref/clight)   # unnormalized rms edge emittance 
+
+#rx  = sqrt(emit_edge*beta_x)             # envelope x-edge 
+#rxp = -sqrt(emit_edge/beta_x)*alpha_x    # envelope x-angle 
 
 
 
