@@ -486,8 +486,8 @@ for ii in sp.keys():
  #* Now set rx etc by fraction of ECR aperture size.  
  #* Previous simulations used betatron functions with a specific emittance value to get 
    #desired beam size. Code used was (y-plane similar):   
-alpha_x_launch = -0.4948820499
-beta_x_launch  = 4.321149742
+alpha_x_launch = -0.3796434382
+beta_x_launch  = 3.971339547
 gamma_x_launch = (1. + alpha_x_launch**2)/beta_x_launch
 
 #emitn_edge = 0.4*mm*mr   # norm rms edge emittance used to set beam size 

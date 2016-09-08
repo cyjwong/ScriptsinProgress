@@ -298,11 +298,12 @@ def adjustments_before_rho():
 # Modify ion distribution at launch point based on different assumptions on their birth 
 #  in the ECR to reflect a target value of beam canonical angular momentum.  
 
-execfile("frib-css-xy-load.py")
+if phase_space_vol_mode != 1:
+    execfile("frib-css-xy-load.py")
 
-if birth_mode == 1 or birth_mode == 2:
-	diag_plt_krot_launch() 
-	diag_plt_krot_v()
+    if birth_mode == 1 or birth_mode == 2:
+	    diag_plt_krot_launch() 
+	    diag_plt_krot_v()
 
 # Carry out explicit fieldsolve with adjusted rho consistent with neutralization 
 adjustments_before_rho()
