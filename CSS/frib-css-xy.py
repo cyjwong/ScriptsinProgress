@@ -159,7 +159,7 @@ r_y = maxnd(ry.values())
 #
 #  Read in lattice description from auxillary script file 
 
-execfile("frib-css-lat.py") 
+execfile("frib-css-design-lat.py") 
 
 
 # Define transverse simulation grid
