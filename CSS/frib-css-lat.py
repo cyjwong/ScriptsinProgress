@@ -569,12 +569,12 @@ q7_nl_id = addnewegrddataset(dx=q7_dx,dy=q7_dy,zlength=q7_zlen,ex=q7_ex_m,ey=q7_
 
 
 
-if q7_str_mode == 0:
-    q7t1p1_str = abs(q7t1p1_k1)*ref_brho_post_gap*ref_vel_post_gap*q7_aper_r**2/2
-    q7t1p2_str = abs(q7t1p2_k1)*ref_brho_post_gap*ref_vel_post_gap*q7_aper_r**2/2
-    q7t1p3_str = abs(q7t1p3_k1)*ref_brho_post_gap*ref_vel_post_gap*q7_aper_r**2/2
+if q7_str_mode == 0:   # -dEx/dx (i.e. G)
+    q7t1p1_str = abs(q7t1p1_k1)*ref_brho_post_gap*ref_vel_post_gap
+    q7t1p2_str = abs(q7t1p2_k1)*ref_brho_post_gap*ref_vel_post_gap
+    q7t1p3_str = abs(q7t1p3_k1)*ref_brho_post_gap*ref_vel_post_gap
 
-if q7_str_mode == 1:
+if q7_str_mode == 1:   # electrode potential
 	dEx_array = q7_ex_m[51][50] - q7_ex_m[49][50]  # difference of E at two sets of mesh points along z
 	dExdx_array = dEx_array / (2*q7_dx)            # approximate dExdx at the centre
 	normalized_sum = sum(dExdx_array)*q7_dz        
