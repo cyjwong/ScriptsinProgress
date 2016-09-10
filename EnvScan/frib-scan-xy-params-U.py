@@ -226,9 +226,9 @@ for s in sp.keys():
   emitn_i = sqrt(emitnx[s]*emitny[s])  # take mean measure in case inhomogeneous  
   temp_i  = temp_p[s]  
   if init_ps_spec == "emitn":
-    emit_thermal[s] = 4.*emitn_i 
+    emit_thermal_birth[s] = 4.*emitn_i 
   elif init_ps_spec == "temp": 
-    emit_thermal[s] = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
+    emit_thermal_birth[s] = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
   else:
     raise Exception("Error: init_emit_spec not set properly") 
 
@@ -364,7 +364,7 @@ for ii in sp.keys():
   s = sp[ii]
   js = s.js
   ekin_i  = ekin[ii]
-  betab_i = sqrt(2.*jperev*ekin_i/sp[s].sm)/clight   # NR beta associated the KE 
+  betab_i = sqrt(2.*jperev*ekin_i/sp[ii].sm)/clight   # NR beta associated the KE 
   hl_pthn[js] = ptheta_birth[ii]
   hl_pth[js] = hl_pthn[js]/betab_i
   hl_epsrn[js] = emit_thermal_birth[ii]/2.
