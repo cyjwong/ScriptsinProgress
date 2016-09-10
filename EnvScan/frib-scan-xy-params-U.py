@@ -215,6 +215,22 @@ ry  = {key: r_extractor for key in sp.keys()}
 rxp = {key: 0. for key in sp.keys()}
 ryp = {key: 0. for key in sp.keys()}
 
+emit_thermal_birth = {}
+
+for s in sp.keys():
+  ekin_i  = ekin[s]
+  betab_i = sqrt(2.*jperev*ekin_i/sp[s].sm)/clight   # NR beta associated the KE 
+  #
+  rb_i    = sqrt(rx[s]*ry[s])          # take mean measure in case inhomogeneous
+  #
+  emitn_i = sqrt(emitnx[s]*emitny[s])  # take mean measure in case inhomogeneous  
+  temp_i  = temp_p[s]  
+  if init_ps_spec == "emitn":
+    emit_thermal[s] = 4.*emitn_i 
+  elif init_ps_spec == "temp": 
+    emit_thermal[s] = betab_i*((2.*rb_i)/sqrt(2.))*sqrt(temp_i/ekin_i)
+  else:
+    raise Exception("Error: init_emit_spec not set properly") 
 
 # --- Species initial canonical angular momentum.
 # 
@@ -256,7 +272,7 @@ birth_mode = 2   # reminder: birth_mode 1 & 2 requries user input below
 
 ## -- Input for birth_mode == 1
 
-ptheta = {  # Values below are rounded numbers obtained from default values of birth_mode = 2 
+ptheta_birth = {  # Values below are rounded numbers obtained from default values of birth_mode = 2 
 'U25': 0.23*mm*mr,
 'U26': 0.23*mm*mr,
 'U27': 0.24*mm*mr,
@@ -334,6 +350,25 @@ bz0_birth = {
 'O4': bz0_birth_i
          }
 
+
+if birth_mode == 2:
+	ptheta_birth={}
+	for ii in sp.keys():
+		ptheta_birth[ii] = 0.5*sp[ii].charge*bz0_birth[ii]*rms_birth[ii]**2/(sp[ii].mass*clight)
+
+hl_pthn    = zeros(top.ns)
+hl_pth    = zeros(top.ns)
+hl_epsrn    = zeros(top.ns) 
+
+for ii in sp.keys():
+  s = sp[ii]
+  js = s.js
+  ekin_i  = ekin[ii]
+  betab_i = sqrt(2.*jperev*ekin_i/sp[s].sm)/clight   # NR beta associated the KE 
+  hl_pthn[js] = ptheta_birth[ii]
+  hl_pth[js] = hl_pthn[js]/betab_i
+  hl_epsrn[js] = emit_thermal_birth[ii]/2.
+
 #
 # Reference particle specification 
 # 
@@ -390,7 +425,7 @@ z_launch  = 66.540938  # Axial position in lattice to launch  beam
                        #   = ecr_z_extr defined in lattice file.
 #z_adv     = 69.2       # Axial position in lattice to advance to (69.2 was end point before bend was introduced)  
 #z_adv     = 69.581900 + 0.75       # Center of D5 dipole + half of axial length of 3d dipole field data
-z_adv     = d5p1_zs-0.4       # End of CSS
+z_adv     = 69.587759-0.9       # End of CSS
 
 
 ds = 2.*mm             # Axial advance step 

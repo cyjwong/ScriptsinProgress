@@ -837,16 +837,14 @@ sp_neut_z = \
 array(
 [ecr_z_extr - 10.*cm, # z to the left of ECR extraction point ... beam should be launched to right  
  gag_zc - 20.90*cm,   # z of neut stop before grated gap, set where 1% of gap E_z field reached 
- gag_zc + 22.28*cm,   # z of neut stop after  grated gap, set where 1% of gap E_z field reached
- d5p1_ze              # z of where the 1st D5 dipole would ideally end   
+ gag_zc + 22.28*cm   # z of neut stop after  grated gap, set where 1% of gap E_z field reached  
 ]    )
 
 sp_neut_frac = \
 array(
 [0.75, 
  0., 
- 0.75,
- 0.
+ 0.75
 ]    )
 
 neut_z    = {key: sp_neut_z    for key in sp.keys()}

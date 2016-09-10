@@ -1,3 +1,6 @@
+# hl_pthn, hl_pth, hl_esprn are redefined in frib-scan-xy-params-U.py
+
+
 # Axisymmetric envelope model solution.
 #   * Designed to use in a variety of simulations with inputs set accordingly. 
 #   * Setup below for use in front end simulation script frib-front-xy.py
@@ -55,7 +58,7 @@ from scipy.integrate import odeint
 
 # Make time array for solution based on advance range and step size
 
-stepnum = int(round((env_ze - env_zs)/hl_dz))
+stepnum = int(round((env_ze - env_zs)/(1.*cm)))
 
 sss = linspace(env_zs, env_ze, stepnum)
 
@@ -122,10 +125,10 @@ def f(state_vector, rrr):
 			derivs.append(speciesq[j]*(efieldz)/jperev )
 			
 		if CorrectionMode == 1:
-			derivs.append(speciesq[j]/jperev*(efieldz + (speciesbeta[j]*clight*hl_pth[0,j]/2 - speciesq[j]*state_vector[j+top.ns]**2*bfieldz/4/specieslist[j].mass)*dBdz) )
+			derivs.append(speciesq[j]/jperev*(efieldz + (speciesbeta[j]*clight*hl_pth[j]/2 - speciesq[j]*state_vector[j+top.ns]**2*bfieldz/4/specieslist[j].mass)*dBdz) )
 		
 		if CorrectionMode == 2:
-			derivs.append(speciesq[j]/jperev*(efieldz - state_vector[j+top.ns]**2/4*d2Edz2 + (speciesbeta[j]*clight*hl_pth[0,j]/2 - speciesq[j]*state_vector[j+top.ns]**2*bfieldz/4/specieslist[j].mass)*dBdz) )
+			derivs.append(speciesq[j]/jperev*(efieldz - state_vector[j+top.ns]**2/4*d2Edz2 + (speciesbeta[j]*clight*hl_pth[j]/2 - speciesq[j]*state_vector[j+top.ns]**2*bfieldz/4/specieslist[j].mass)*dBdz) )
 
 ## build second lot in deriv output (i.e. dsigmadz)
 
@@ -158,7 +161,7 @@ def f(state_vector, rrr):
 		
 		term3 = ((speciesq[j]*bfieldz)/(2*specieslist[j].mass*speciesbeta[j]*clight))**2*state_vector[j+top.ns]
 
-		emitterm = ((hl_epsrn[0,j]/speciesbeta[j])**2 + (hl_pthn[0,j] /speciesbeta[j])**2) / state_vector[j+top.ns]**3
+		emitterm = ((hl_epsrn[j]/speciesbeta[j])**2 + (hl_pthn[j] /speciesbeta[j])**2) / state_vector[j+top.ns]**3
 		
 		# top.hepsr equals two times the rms-r-emittance
 		
@@ -272,9 +275,9 @@ def fwarp(state_vector_2, rrr):
 		keinter = interpolate.interp1d(zlist, kineticenergylist, kind='slinear')	
 			
 		if rrr <= env_zs:
-			emittance_j = hl_epsrn[0,j]
-			ptheta_j = hl_pthn[0,j]
-			ke_j = hl_ekin[0,j]
+			emittance_j = hl_epsrn[j]
+			ptheta_j = hl_pthn[j]
+			ke_j = hl_ekin[j]
 		elif rrr >= env_ze:
 			emittance_j = hl_epsrn[last_step_number,j]
 			ptheta_j = hl_pthn[last_step_number,j]
