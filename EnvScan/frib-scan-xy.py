@@ -501,7 +501,7 @@ execfile("frib-scan-env.py")
 
 # Diagnostics to compare envelope model to Warp xy simulation 
 
-#execfile("frib-scan-env-diag.py")
+execfile("frib-scan-env-diag.py")
 
 
 # Make sure that last plot is flushed from buffer
