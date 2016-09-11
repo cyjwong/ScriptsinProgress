@@ -57,9 +57,11 @@ setup()
 top.runmaker = "Wong and Lund"
 
 
+### > for i in {1...10}; do python frib-scan-xy.py; done
 
+### > for ((n=0; n<10; n++)); do python frib-scan-xy.py; done
 
-from runcounter import *
+from warp.utils.runcounter import *
 i1, i2 = runcounter(ensembles=[7])
 
 # Peak on-axis B-field of the two solenoids (in Telsa)
