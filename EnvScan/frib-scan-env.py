@@ -203,108 +203,108 @@ psoln = odeint (f, initialstates, sss, hmax = stepsize , mxstep= mxstep, atol = 
 
 
 
-## Set up function used to integrate the Env. Model using real-time WARP data
+### Set up function used to integrate the Env. Model using real-time WARP data
 
-from scipy import interpolate
+#from scipy import interpolate
 
-#state_vector_2 = [0]*3*top.ns
-state_vector_2 = zeros(3*top.ns)
+##state_vector_2 = [0]*3*top.ns
+#state_vector_2 = zeros(3*top.ns)
 
-deltaz = stepsize/2.
+#deltaz = stepsize/2.
 
-last_step_number = int((env_ze-env_zs)/ds_diag) + 1 # employed in out-of-range interpolation
+#last_step_number = int((env_ze-env_zs)/ds_diag) + 1 # employed in out-of-range interpolation
 
-zlist = []
+#zlist = []
 		
-zlist = array([top.hzbeam[kkk] for kkk in range(0, last_step_number + 1)])
+#zlist = array([top.hzbeam[kkk] for kkk in range(0, last_step_number + 1)])
 
-def fwarp(state_vector_2, rrr):
+#def fwarp(state_vector_2, rrr):
 	
-	efieldz = getappliedfields(0, 0, rrr)[2][0]
-	bfieldz = getappliedfields(0, 0, rrr)[5][0]
+	#efieldz = getappliedfields(0, 0, rrr)[2][0]
+	#bfieldz = getappliedfields(0, 0, rrr)[5][0]
 	
-	dEdz = (getappliedfields(0, 0, rrr + deltaz/2)[2][0] - getappliedfields(0, 0, rrr - deltaz/2)[2][0])/deltaz
-	#dVdz = 0
+	#dEdz = (getappliedfields(0, 0, rrr + deltaz/2)[2][0] - getappliedfields(0, 0, rrr - deltaz/2)[2][0])/deltaz
+	##dVdz = 0
 	
-	derivs = [0]*top.ns
+	#derivs = [0]*top.ns
 	
-	for ii in sp.keys():
-	  s = sp[ii]
-	  js = s.js
-	  derivs[js] = s.charge/jperev*efieldz
+	#for ii in sp.keys():
+	  #s = sp[ii]
+	  #js = s.js
+	  #derivs[js] = s.charge/jperev*efieldz
 	
-	for i in range(top.ns):
-		derivs.append(state_vector_2[i+2*top.ns]) #build second lot in deriv output
+	#for i in range(top.ns):
+		#derivs.append(state_vector_2[i+2*top.ns]) #build second lot in deriv output
 	
-	speciesbeta = []
+	#speciesbeta = []
 	
-	for i in range(top.ns):
-		speciesbeta.append(sqrt((2*state_vector_2[i]*jperev)/(specieslist[i].mass*clight**2)))
+	#for i in range(top.ns):
+		#speciesbeta.append(sqrt((2*state_vector_2[i]*jperev)/(specieslist[i].mass*clight**2)))
 
-	# generate list of neutralization factors
+	## generate list of neutralization factors
 	
-	species_neut_f   = zeros(top.ns)
+	#species_neut_f   = zeros(top.ns)
 	
-	for ii in sp.keys():
-	  js = sp[ii].js
-	  species_neut_f[js] = rho_neut_f(rrr,ii)
+	#for ii in sp.keys():
+	  #js = sp[ii].js
+	  #species_neut_f[js] = rho_neut_f(rrr,ii)
 
-	for j in range(top.ns):
+	#for j in range(top.ns):
 		
-		scterm = 0
+		#scterm = 0
 		
-		emittancelist = []
+		#emittancelist = []
 		
-		#for kkk in range(len(top.hepsr)):
-			#emittancelist = emittancelist.append(top.hepsr[0,kkk,j])
+		##for kkk in range(len(top.hepsr)):
+			##emittancelist = emittancelist.append(top.hepsr[0,kkk,j])
 		
-		emittancelist = array([hl_epsrn[kkk,j] for kkk in range(0, last_step_number+1)])
+		#emittancelist = array([hl_epsrn[kkk,j] for kkk in range(0, last_step_number+1)])
 		
-		pthetaLIST = []
+		#pthetaLIST = []
 		
-		pthetaLIST = array([hl_pthn[kkk,j] for kkk in range(0, last_step_number+1)])
+		#pthetaLIST = array([hl_pthn[kkk,j] for kkk in range(0, last_step_number+1)])
 		
-		kineticenergylist = []
+		#kineticenergylist = []
 		
-		kineticenergylist = array([hl_ekin[kkk,j] for kkk in range(0, last_step_number+1)])
+		#kineticenergylist = array([hl_ekin[kkk,j] for kkk in range(0, last_step_number+1)])
 		
-		emitinter = interpolate.interp1d(zlist, emittancelist, kind='slinear')
+		#emitinter = interpolate.interp1d(zlist, emittancelist, kind='slinear')
 		
-		pthetainter = interpolate.interp1d(zlist, pthetaLIST, kind='slinear')
+		#pthetainter = interpolate.interp1d(zlist, pthetaLIST, kind='slinear')
 		
-		keinter = interpolate.interp1d(zlist, kineticenergylist, kind='slinear')	
+		#keinter = interpolate.interp1d(zlist, kineticenergylist, kind='slinear')	
 			
-		if rrr <= env_zs:
-			emittance_j = hl_epsrn[j]
-			ptheta_j = hl_pthn[j]
-			ke_j = hl_ekin[j]
-		elif rrr >= env_ze:
-			emittance_j = hl_epsrn[last_step_number,j]
-			ptheta_j = hl_pthn[last_step_number,j]
-			ke_j = hl_ekin[last_step_number,j]		
-		else:
-			emittance_j = emitinter(rrr)
-			ptheta_j = pthetainter(rrr)
-			ke_j = keinter(rrr)				
+		#if rrr <= env_zs:
+			#emittance_j = hl_epsrn[j]
+			#ptheta_j = hl_pthn[j]
+			#ke_j = hl_ekin[j]
+		#elif rrr >= env_ze:
+			#emittance_j = hl_epsrn[last_step_number,j]
+			#ptheta_j = hl_pthn[last_step_number,j]
+			#ke_j = hl_ekin[last_step_number,j]		
+		#else:
+			#emittance_j = emitinter(rrr)
+			#ptheta_j = pthetainter(rrr)
+			#ke_j = keinter(rrr)				
 	
-		for s in range(top.ns):
-			QQQ = (speciesq[j]*speciesI[s])/(2*pi*eps0*specieslist[j].mass*speciesbeta[j]**2*speciesbeta[s]*clight**3)
-			scterm += QQQ*(1-species_neut_f[s])*state_vector_2[j+top.ns]/(state_vector_2[j+top.ns]**2 + state_vector_2[s+top.ns]**2)
+		#for s in range(top.ns):
+			#QQQ = (speciesq[j]*speciesI[s])/(2*pi*eps0*specieslist[j].mass*speciesbeta[j]**2*speciesbeta[s]*clight**3)
+			#scterm += QQQ*(1-species_neut_f[s])*state_vector_2[j+top.ns]/(state_vector_2[j+top.ns]**2 + state_vector_2[s+top.ns]**2)
 		
-		term1 = (speciesq[j]*-efieldz)/(2*state_vector_2[j]*jperev) * state_vector_2[j+2*top.ns]
+		#term1 = (speciesq[j]*-efieldz)/(2*state_vector_2[j]*jperev) * state_vector_2[j+2*top.ns]
 		
-		term2 = (speciesq[j]*-dEdz)/(4*state_vector_2[j]*jperev) * state_vector_2[j+top.ns]
+		#term2 = (speciesq[j]*-dEdz)/(4*state_vector_2[j]*jperev) * state_vector_2[j+top.ns]
 		
-		term3 = ((speciesq[j]*bfieldz)/(2*specieslist[j].mass*speciesbeta[j]*clight))**2*state_vector_2[j+top.ns]
+		#term3 = ((speciesq[j]*bfieldz)/(2*specieslist[j].mass*speciesbeta[j]*clight))**2*state_vector_2[j+top.ns]
 
-		emitterm = ((emittance_j/speciesbeta[j])**2 + (ptheta_j /speciesbeta[j])**2) / state_vector_2[j+top.ns]**3
+		#emitterm = ((emittance_j/speciesbeta[j])**2 + (ptheta_j /speciesbeta[j])**2) / state_vector_2[j+top.ns]**3
 		
-		d2sigmadz2 = term1 + term2 - term3 + scterm + emitterm
+		#d2sigmadz2 = term1 + term2 - term3 + scterm + emitterm
 		
-		derivs.append(d2sigmadz2)
+		#derivs.append(d2sigmadz2)
 		
-	return derivs
+	#return derivs
 		
 		
-if integratewarp == 1:
-	psolnwarp = odeint (fwarp, initialstates, sss, hmax = stepsize, mxstep= mxstep, atol = atol, rtol = rtol)
+#if integratewarp == 1:
+	#psolnwarp = odeint (fwarp, initialstates, sss, hmax = stepsize, mxstep= mxstep, atol = atol, rtol = rtol)

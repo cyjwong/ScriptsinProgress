@@ -57,7 +57,7 @@ setup()
 top.runmaker = "Wong and Lund"
 
 
-### > for i in {1...10}; do python frib-scan-xy.py; done
+### > for i in {1..10}; do python frib-scan-xy.py; done
 
 ### > for ((n=0; n<10; n++)); do python frib-scan-xy.py; done
 
@@ -316,7 +316,7 @@ execfile("frib-scan-lat.py")
 ##   set previously.  Particles are advanced with the step() command later
 ##   after various diagnostics are setup.
 
-#package("wxy"); generate()
+package("wxy"); generate()
 
 ## Make diagnostics for applied lattice fields 
 #execfile("frib-scan-lat-diag.py") 
