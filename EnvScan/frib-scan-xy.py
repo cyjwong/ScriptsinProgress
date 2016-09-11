@@ -56,6 +56,22 @@ setup()
 # Set runmaker - included in informational labels on output plots
 top.runmaker = "Wong and Lund"
 
+
+
+
+from runcounter import *
+i1, i2 = runcounter(ensembles=[7])
+
+# Peak on-axis B-field of the two solenoids (in Telsa)
+
+s4p1_str = 0.3 + 0.1*i1
+s4p2_str = 0.3 + 0.1*i2
+
+
+
+
+
+
 # Read in parameters describing beam to be simulated
 #   - Use appropriate name input file for type of beam to be simulated. 
 execfile("frib-scan-xy-params-U.py") 
@@ -207,7 +223,7 @@ r_y = maxnd(ry.values())
 #
 #  Read in lattice description from auxillary script file 
 
-#execfile("frib-scan-lat.py") 
+execfile("frib-scan-lat.py") 
 
 
 ## Define transverse simulation grid
@@ -477,7 +493,7 @@ r_y = maxnd(ry.values())
 
 
 
-execfile("frib-scan-lat.py") 
+#execfile("frib-scan-lat.py") 
 
 # Multi-Species Envelope Model 
 
@@ -485,10 +501,29 @@ execfile("frib-scan-env.py")
 
 # Diagnostics to compare envelope model to Warp xy simulation 
 
-execfile("frib-scan-env-diag.py")
+#execfile("frib-scan-env-diag.py")
 
 
 # Make sure that last plot is flushed from buffer
 fma() 
+
+
+u34_r = psoln[-1,21]*1000/sqrt(2.)
+u34_drdz = psoln[-1,41]*1000/sqrt(2.)
+
+
+
+outfile = open("ScanOutput.dat", "a")
+
+outfile.write("\n")
+
+outfile.write("1st sol = %s, 2nd sol = %s, r_final = %6.3f, drdz_final = %s" %(s4p1_str, s4p2_str, u34_r, u34_drdz) )
+
+outfile.close()
+
+
+
+
+
 
 

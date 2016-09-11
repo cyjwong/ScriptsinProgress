@@ -69,11 +69,11 @@ else:
 # --- element specification 
 
 s4p1_zc  = 66.956900   # S4 1: z-center  
-s4p1_str = 0.6 # 0.754 # S4 1: peak on-axis B_z field strength [Tesla]
+#s4p1_str = 0.6 # 0.754 # S4 1: peak on-axis B_z field strength [Tesla]
 s4p1_typ = "nl"        # S4 1: type: "lin" = linear optics fields or "nl" = nonlinear r-z field  
 
 s4p2_zc  = 68.306900   # S4 2: z-center 
-s4p2_str = 0.5 # 0.617 # s4 2: peak on-axis B_z field strength [Tesla]
+#s4p2_str = 0.5 # 0.617 # s4 2: peak on-axis B_z field strength [Tesla]
 s4p2_typ = "nl"        # S4 1: type: "lin" = linear optics fields or "nl" = nonlinear r-z field  
 
 # --- linear element data  
