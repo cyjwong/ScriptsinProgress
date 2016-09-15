@@ -509,9 +509,16 @@ execfile("frib-scan-env-diag.py")
 # Make sure that last plot is flushed from buffer
 fma() 
 
+u34_sigma_x = psoln[-1,21]/sqrt(2.)
+u34_d_sigmax_ds = psoln[-1,41]/sqrt(2.)
 
-u34_r = psoln[-1,21]*1000/sqrt(2.)
-u34_drdz = psoln[-1,41]*1000/sqrt(2.)
+u34_js = sp["U34"].js
+
+u34_beta = u34_sigma_x**2/(hl_eff[js]/2.)
+u34_alpha = -u34_sigma_x*u34_d_sigmax_ds/(hl_eff[js]/2.)
+
+#u34_r = psoln[-1,21]*1000/sqrt(2.)
+#u34_drdz = psoln[-1,41]*1000/sqrt(2.)
 
 
 
@@ -519,7 +526,7 @@ outfile = open("ScanOutput.dat", "a")
 
 outfile.write("\n")
 
-outfile.write("1st sol = %s, 2nd sol = %s, r_final = %6.3f, drdz_final = %s" %(s4p1_str, s4p2_str, u34_r, u34_drdz) )
+outfile.write("1st sol = %s, 2nd sol = %s, beta_final = %6.3f, alpha_final = %s" %(s4p1_str, s4p2_str, u34_beta, u34_alpha) )
 
 outfile.close()
 
