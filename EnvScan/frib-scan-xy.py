@@ -228,73 +228,73 @@ r_y = maxnd(ry.values())
 execfile("frib-scan-lat.py") 
 
 
-## Define transverse simulation grid
+# Define transverse simulation grid
 
-#sym_x = 1.
-#sym_y = 1.
-#if w3d.l4symtry:
-  #sym_x = 0.5
-  #sym_y = 0.5
-#elif w3d.l2symtry:
-  #sym_x = 0.5 
+sym_x = 1.
+sym_y = 1.
+if w3d.l4symtry:
+  sym_x = 0.5
+  sym_y = 0.5
+elif w3d.l2symtry:
+  sym_x = 0.5 
 
-#w3d.nx = int(sym_x*n_grid) 
-#w3d.ny = int(sym_y*n_grid)
+w3d.nx = int(sym_x*n_grid) 
+w3d.ny = int(sym_y*n_grid)
 
-## ---- Grid bounds 
-##      Some bounds will be reset to zero by code on generation
-##      if symmetry options are set.
-#l_grid = 2.*r_grid            # length edge of simulation grid [m]      
-#w3d.xmmax =  l_grid/2.        # x-grid max limit [m] 
-#w3d.xmmin = -l_grid/2.        # x-grid min limit [m] 
-#w3d.ymmax =  l_grid/2.        # y-grid max limit [m] 
-#w3d.ymmin = -l_grid/2.        # y-grid min limit [m] 
+# ---- Grid bounds 
+#      Some bounds will be reset to zero by code on generation
+#      if symmetry options are set.
+l_grid = 2.*r_grid            # length edge of simulation grid [m]      
+w3d.xmmax =  l_grid/2.        # x-grid max limit [m] 
+w3d.xmmin = -l_grid/2.        # x-grid min limit [m] 
+w3d.ymmax =  l_grid/2.        # y-grid max limit [m] 
+w3d.ymmin = -l_grid/2.        # y-grid min limit [m] 
 
-## --- grid increments to use before code generation in setup
-#dx = l_grid/float(n_grid)
-
-
-## Particle loading
-##
-## Set simulation macro-particle number (top.npmax) by specifying the
-##  number of macro-particles to load per xy grid cell (nppg) using an
-## rms equivalent uniform density beam measure.  This number is (re)set
-## consistently with the symmetry options.  
-##   sp['name'].np = particle #
-##   top.nplive = total number live particles = len(sp)*top.npmax at time of load 
-## 
-
-#top.npmax = int(nppg*pi*(r_x*r_y)/dx**2*sym_x*sym_y) # max initial particles loaded (each species) 
+# --- grid increments to use before code generation in setup
+dx = l_grid/float(n_grid)
 
 
-#top.zbeam = z_launch    # present z of simulation, to launch, reset consistently 
+# Particle loading
+#
+# Set simulation macro-particle number (top.npmax) by specifying the
+#  number of macro-particles to load per xy grid cell (nppg) using an
+# rms equivalent uniform density beam measure.  This number is (re)set
+# consistently with the symmetry options.  
+#   sp['name'].np = particle #
+#   top.nplive = total number live particles = len(sp)*top.npmax at time of load 
+# 
 
-## --- random number options to use in loading 
-#w3d.xrandom  = "pseudo" # "digitrev"    # load x,y,z  with digitreverse random numbers 
-#w3d.vtrandom = "pseudo" # "digitrev"    # load vx, vy with digitreverse random numbers
-#w3d.vzrandom = "pseudo" # "digitrev"    # load vz     with digitreverse random numbers 
-#w3d.cylinder = true          # load a cylinder
-
-## Particle moving
-##
-
-#top.lrelativ   =  false    # turn off relativistic kinematics
-#top.relativity = 0         # turn off relativistic self-field correction
-                           ##   to account for approx diamagnetic B-field of beam
-
-#wxy.ds = ds                # ds for part adv [m] 
-#wxy.lvzchang = true        # Use iterative stepping, which is needed if
-                           ## the vz of the particles changes.
-                           ##  ... must change even in linear lattice 
-                           ##          for high-order energy conservation 
-#top.ibpush   = 2           # magnetic field particle push, 
-                           ##   0 - off, 1 - fast, 2 - accurate 
+top.npmax = int(nppg*pi*(r_x*r_y)/dx**2*sym_x*sym_y) # max initial particles loaded (each species) 
 
 
-## Setup field solver using 2d multigrid field solver. 
+top.zbeam = z_launch    # present z of simulation, to launch, reset consistently 
 
-#w3d.boundxy = 0              # Neuman boundary conditions on edge of grid.
-#w3d.solvergeom = w3d.XYgeom  # fieldsolve type to 2d multigrid 
+# --- random number options to use in loading 
+w3d.xrandom  = "pseudo" # "digitrev"    # load x,y,z  with digitreverse random numbers 
+w3d.vtrandom = "pseudo" # "digitrev"    # load vx, vy with digitreverse random numbers
+w3d.vzrandom = "pseudo" # "digitrev"    # load vz     with digitreverse random numbers 
+w3d.cylinder = true          # load a cylinder
+
+# Particle moving
+#
+
+top.lrelativ   =  false    # turn off relativistic kinematics
+top.relativity = 0         # turn off relativistic self-field correction
+                           #   to account for approx diamagnetic B-field of beam
+
+wxy.ds = ds                # ds for part adv [m] 
+wxy.lvzchang = true        # Use iterative stepping, which is needed if
+                           # the vz of the particles changes.
+                           #  ... must change even in linear lattice 
+                           #          for high-order energy conservation 
+top.ibpush   = 2           # magnetic field particle push, 
+                           #   0 - off, 1 - fast, 2 - accurate 
+
+
+# Setup field solver using 2d multigrid field solver. 
+
+w3d.boundxy = 0              # Neuman boundary conditions on edge of grid.
+w3d.solvergeom = w3d.XYgeom  # fieldsolve type to 2d multigrid 
 
 ## --- Uncomment to turn off space-charge deposition for simulation of particles 
 ##     moving in applied field 

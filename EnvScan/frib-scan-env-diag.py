@@ -44,7 +44,7 @@ def envelope(iii):
     s = sp[iii]
     js = s.js
     co = s.color
-    plg(psoln[:,js+20]*1000/sqrt(2),sss, color=co, type="dash")
+    plg(psoln[:,js+20]*1000/sqrt(2),sss, color=co)
     ptitles("Env. Model (dashed), Warp (solid), %s" % iii,"z [m]","RMS x-Envelope [mm]", )
     #limits(plotxmin,plotxmax, plotymin, plotymax)
     
