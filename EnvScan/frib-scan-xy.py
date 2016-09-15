@@ -509,6 +509,12 @@ execfile("frib-scan-env-diag.py")
 # Make sure that last plot is flushed from buffer
 fma() 
 
+
+for ii in sp.keys():
+  s = sp[ii]
+  js = s.js
+  hl_eff[js] = hl_eff_n[js]/sqrt(2.*jperev*psoln[-1,js]/sp[js].sm)/clight
+
 u34_sigma_x = psoln[-1,21]/sqrt(2.)
 u34_d_sigmax_ds = psoln[-1,41]/sqrt(2.)
 

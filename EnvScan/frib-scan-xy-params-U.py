@@ -360,6 +360,7 @@ hl_pthn    = zeros(top.ns)
 hl_pth    = zeros(top.ns)
 hl_epsrn    = zeros(top.ns) 
 hl_epsr    = zeros(top.ns) 
+hl_eff_n     = zeros(top.ns)
 hl_eff     = zeros(top.ns)
 
 for ii in sp.keys():
@@ -372,7 +373,7 @@ for ii in sp.keys():
   hl_epsrn[js] = emit_thermal_birth[ii]/2.
   hl_epsr[js] = hl_epsrn[js]/betab_i
 
-hl_eff = sqrt(hl_pth**2 + hl_epsr**2)
+hl_eff_n = sqrt(hl_pthn**2 + hl_epsrn**2)
 
 #
 # Reference particle specification 
