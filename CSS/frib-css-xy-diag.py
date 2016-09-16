@@ -72,7 +72,7 @@ diag_part_z = array([
   q7t1p2_zc,
   q7t1_mid_23 + 2*mm,
   q7t1p3_zc,
-  71.592,
+  (q7t2p1_zc + q7t1p3_zc)/2,
   q7t2p1_zc,
   (q7t2p1_zc + q7t2p2_zc)/2,
   q7t2p2_zc,

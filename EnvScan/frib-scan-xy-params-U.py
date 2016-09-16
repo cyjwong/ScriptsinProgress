@@ -360,8 +360,8 @@ hl_pthn    = zeros(top.ns)
 hl_pth    = zeros(top.ns)
 hl_epsrn    = zeros(top.ns) 
 hl_epsr    = zeros(top.ns) 
-hl_eff_n     = zeros(top.ns)
-hl_eff     = zeros(top.ns)
+hl_eff_n     = zeros(top.ns) # effective normalized phase space volume
+hl_eff_end     = zeros(top.ns) # effective phase space volume at the end
 
 for ii in sp.keys():
   s = sp[ii]

@@ -513,15 +513,15 @@ fma()
 for ii in sp.keys():
   s = sp[ii]
   js = s.js
-  hl_eff[js] = hl_eff_n[js]/sqrt(2.*jperev*psoln[-1,js]/sp[js].sm)/clight
+  hl_eff_end[js] = hl_eff_n[js]/(sqrt(2.*jperev*psoln[-1,js]/sp[ii].sm)/clight) # convert using v/c at the end
 
-u34_sigma_x = psoln[-1,21]/sqrt(2.)
+u34_sigma_x = psoln[-1,21]/sqrt(2.)    # conversion between sigma_r and sigma_x
 u34_d_sigmax_ds = psoln[-1,41]/sqrt(2.)
 
 u34_js = sp["U34"].js
 
-u34_beta = u34_sigma_x**2/(hl_eff[js]/2.)
-u34_alpha = -u34_sigma_x*u34_d_sigmax_ds/(hl_eff[js]/2.)
+u34_beta = u34_sigma_x**2/(hl_eff_end[u34_js]/2.) # effective phase space area = 2*emit_rms_x
+u34_alpha = -u34_sigma_x*u34_d_sigmax_ds/(hl_eff_end[u34_js]/2.)
 
 #u34_r = psoln[-1,21]*1000/sqrt(2.)
 #u34_drdz = psoln[-1,41]*1000/sqrt(2.)
