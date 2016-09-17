@@ -596,8 +596,8 @@ if q7t1p1_typ == "lin":
   q7t1p1 = addnewmmlt(zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_lin_id,sc=q7t1p1_str*q7t1p1_sign) 
 elif q7t1p1_typ == "nl":
   q7t1p1 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t1p1_zc-q7_zlen/2.,ze=q7t1p1_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p1_str*q7t1p1_sign)
-elif q7t1p1_typ == "ideal":
-  q7t1p1 = addnewequad(zs = q7t1p1_zc-q7_design_len/2., ze = q7t1p1_zc+q7_design_len/2., de = q7t1p1_str*q7t1p1_sign)
+elif q7t1p1_typ == "ideal":   # additional -ve sign in de because dEx/dx should be -ve for focusing in x
+  q7t1p1 = addnewequad(zs = q7t1p1_zc-q7_design_len/2., ze = q7t1p1_zc+q7_design_len/2., de = -q7t1p1_str*q7t1p1_sign)
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p1 = None
@@ -608,7 +608,7 @@ if q7t1p2_typ == "lin":
 elif q7t1p2_typ == "nl":
   q7t1p2 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t1p2_zc-q7_zlen/2.,ze=q7t1p2_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p2_str*q7t1p2_sign) 
 elif q7t1p2_typ == "ideal":
-  q7t1p2 = addnewequad(zs = q7t1p2_zc-q7_design_len/2., ze = q7t1p2_zc+q7_design_len/2., de = q7t1p2_str*q7t1p2_sign)
+  q7t1p2 = addnewequad(zs = q7t1p2_zc-q7_design_len/2., ze = q7t1p2_zc+q7_design_len/2., de = -q7t1p2_str*q7t1p2_sign)
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p2 = None
@@ -619,7 +619,7 @@ if q7t1p3_typ == "lin":
 elif q7t1p3_typ == "nl":
   q7t1p3 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t1p3_zc-q7_zlen/2.,ze=q7t1p3_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t1p3_str*q7t1p3_sign)
 elif q7t1p3_typ == "ideal":
-  q7t1p3 = addnewequad(zs = q7t1p3_zc-q7_design_len/2., ze = q7t1p3_zc+q7_design_len/2., de = q7t1p3_str*q7t1p3_sign) 
+  q7t1p3 = addnewequad(zs = q7t1p3_zc-q7_design_len/2., ze = q7t1p3_zc+q7_design_len/2., de = -q7t1p3_str*q7t1p3_sign) 
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t1p3 = None
@@ -630,7 +630,7 @@ if q7t2p1_typ == "lin":
 elif q7t2p1_typ == "nl":
   q7t2p1 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t2p1_zc-q7_zlen/2.,ze=q7t2p1_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t2p1_str*q7t2p1_sign)
 elif q7t2p1_typ == "ideal":
-  q7t2p1 = addnewequad(zs = q7t2p1_zc-q7_design_len/2., ze = q7t2p1_zc+q7_design_len/2., de = q7t2p1_str*q7t2p1_sign) 
+  q7t2p1 = addnewequad(zs = q7t2p1_zc-q7_design_len/2., ze = q7t2p1_zc+q7_design_len/2., de = -q7t2p1_str*q7t2p1_sign) 
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t2p1 = None
@@ -641,7 +641,7 @@ if q7t2p2_typ == "lin":
 elif q7t2p2_typ == "nl":
   q7t2p2 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t2p2_zc-q7_zlen/2.,ze=q7t2p2_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t2p2_str*q7t2p2_sign)
 elif q7t2p2_typ == "ideal":
-  q7t2p2 = addnewequad(zs = q7t2p2_zc-q7_design_len/2., ze = q7t2p2_zc+q7_design_len/2., de = q7t2p2_str*q7t2p2_sign)  
+  q7t2p2 = addnewequad(zs = q7t2p2_zc-q7_design_len/2., ze = q7t2p2_zc+q7_design_len/2., de = -q7t2p2_str*q7t2p2_sign)  
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t2p2 = None
@@ -652,7 +652,7 @@ if q7t2p3_typ == "lin":
 elif q7t2p3_typ == "nl":
   q7t2p3 = addnewegrd(xs=q7_x_m_min,ys=q7_y_m_min,zs=q7t2p3_zc-q7_zlen/2.,ze=q7t2p3_zc+q7_zlen/2.,id=q7_nl_id,sc=q7t2p3_str*q7t2p3_sign) 
 elif q7t2p3_typ == "ideal":
-  q7t2p3 = addnewequad(zs = q7t2p3_zc-q7_design_len/2., ze = q7t2p3_zc+q7_design_len/2., de = q7t2p3_str*q7t2p3_sign)  
+  q7t2p3 = addnewequad(zs = q7t2p3_zc-q7_design_len/2., ze = q7t2p3_zc+q7_design_len/2., de = -q7t2p3_str*q7t2p3_sign)  
 else:
   print("Warning: No S4 1st Solenoid Applied Fields Defined") 
   q7t2p3 = None
