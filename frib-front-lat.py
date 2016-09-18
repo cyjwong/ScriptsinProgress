@@ -259,7 +259,8 @@ else:
 
 
 
-
+idealCSS = True # if true, all positions in CSS are defined relative to 1st D5 in accordance with DIMAD design
+                # idealCSS involves repositioning of the elements in additional to using ideal elements
 
 # D5 Bending Dipole 
 
@@ -271,6 +272,8 @@ d5p1_typ = "nl"        # D5 1: type: "ideal" = uniform By, "lin" = linear optics
 d5p1_ideal_len = 1.0
 
 d5p2_zc  = 73.248371   # D5 2: z-center  
+if IdealCSS = True:
+	d5p2_zc = d5p1_zc + 4.2
 d5p2_str = 1.0         # D5 2: Input field scale factor
 d5p2_typ = "nl"        # D5 2: type: "ideal" = uniform By, "lin" = linear optics fields, "3d" = 3d field
 d5p2_ideal_len = 1.0
@@ -494,6 +497,8 @@ inter_quad_distance = 0.335 # centroid distance between two quads in a triplet
 
 ## 1st triplet
 q7t1p1_zc = 70.537759 # (q7: Q7 device type; t1: 1st triplet; p1: part 1)
+if IdealCSS = True:
+	q7t1p1_zc = d5p1_zc + 0.95
 #q7t1p1_str = 10000 # [V]
 q7t1p1_sign = 1    # +1 for x_quad, -1 for y_quad
 q7t1p1_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z field
@@ -510,6 +515,8 @@ q7t1p3_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z 
 
 ## 2nd triplet
 q7t2p1_zc = 72.161896 # (q7: Q7 device type; t2: 2nd triplet; p1: part 1)
+if IdealCSS = True:
+	q7t2p1_zc = d5p1_zc + 2.58
 #q7t1p1_str = 10000 # [V]
 q7t2p1_sign = 1    # +1 for x_quad, -1 for y_quad
 q7t2p1_typ = "nl"  # type: "lin" = linear optics fields or "nl" = nonlinear r-z field
