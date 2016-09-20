@@ -488,4 +488,23 @@ execfile("frib-front-env-diag.py")
 # Make sure that last plot is flushed from buffer
 fma() 
 
+last_nonzero = amax(nonzero(hl_epsx[:,0]))
 
+outfile = open("fulltnermalnoSC.out", "a")
+
+savetxt(outfile, hl_zbeam[0:last_nonzero,1])
+savetxt(outfile, hl_xrms[0:last_nonzero,1])
+savetxt(outfile, hl_yrms[0:last_nonzero,1])
+savetxt(outfile, hl_rrms[0:last_nonzero,1])
+savetxt(outfile, hl_epsx[0:last_nonzero,1])
+savetxt(outfile, hl_epsxn[0:last_nonzero,1])
+savetxt(outfile, hl_epsy[0:last_nonzero,1])
+savetxt(outfile, hl_epsyn[0:last_nonzero,1])
+savetxt(outfile, hl_epsr[0:last_nonzero,1])
+savetxt(outfile, hl_epsrn[0:last_nonzero,1])
+
+savetxt(outfile, sss)
+savetxt(outfile, psoln[:,21])
+savetxt(outfile, psoln[:,41])
+
+outfile.close()
